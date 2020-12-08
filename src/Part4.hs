@@ -20,44 +20,52 @@ import Control.Applicative
 -- Написать экземпляр класса Functor для Parser
 -- (удовлетворяющий законам)
 instance Functor Parser where
+    fmap = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #34
 --
 -- Написать экземпляр класса Applicative для Parser
 -- (удовлетворяющий законам)
 instance Applicative Parser where
+    pure = error "Implement me!"
+    (<*>) = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #35
 --
 -- Написать экземпляр класса Alternative для Parser
 -- (удовлетворяющий законам)
 instance Alternative Parser where
+    empty = error "Implement me!"
+    (<|>) = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #36
 --
 -- Написать экземпляр класса Monad для Parser
 -- (удовлетворяющий законам)
 instance Monad Parser where
-
+    (>>=) = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #37
 --
 -- Написать экземпляр класса Functor для Foo
 -- (удовлетворяющий законам)
 instance Functor (Foo r) where
+    fmap = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #38
 --
 -- Написать экземпляр класса Applicative для Foo
 -- (удовлетворяющий законам)
 instance Applicative (Foo r) where
+    pure = error "Implement me!"
+    (<*>) = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #39
 --
 -- Написать экземпляр класса Monad для Foo
 -- (удовлетворяющий законам)
 instance Monad (Foo r) where
-
+    (>>=) = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #40
 --
