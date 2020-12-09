@@ -57,7 +57,7 @@ prob10 color
     | hasDuplicates valuesList = Nothing
     | otherwise = find (\part -> prob9 part == maximum valuesList) colorsList
     where
-        colorsList = 
+        colorsList =
             [
                 Red   $ color & red,
                 Green $ color & green,
@@ -71,7 +71,10 @@ prob10 color
 --
 -- Найти сумму элементов дерева
 prob11 :: Num a => Tree a -> a
-prob11 = error "Implement me!"
+prob11 tree = leftSum + (tree & root) + rightSum
+    where
+        leftSum = maybe 0 prob11 $ tree & left
+        rightSum = maybe 0 prob11 $ tree & right
 
 ------------------------------------------------------------
 -- PROBLEM #12
@@ -82,7 +85,24 @@ prob11 = error "Implement me!"
 -- а все элементы правого поддерева -- не меньше элемента
 -- в узле)
 prob12 :: Ord a => Tree a -> Bool
-prob12 = error "Implement me!"
+prob12 tree = and
+    [
+        leftIsSearchTree,
+        leftValueIsLess,
+        rightValueIsMoreOrEqual,
+        rightIsSearchTree
+    ]
+    where
+        leftIsSearchTree  = maybe True prob12 $ tree & left
+        rightIsSearchTree = maybe True prob12 $ tree & right
+
+        leftValueIsLess = maybe True
+            (\leftSubTree -> (leftSubTree & root) < (tree & root)) 
+            $ tree & left
+
+        rightValueIsMoreOrEqual = maybe True
+            (\rightSubTree -> (rightSubTree & root) >= (tree & root))
+            $ tree & right
 
 ------------------------------------------------------------
 -- PROBLEM #13
