@@ -4,6 +4,7 @@ import Part2.Types
 
 import Data.Function ((&))
 import Data.List(nub, find)
+import Control.Monad(msum)
 
 ------------------------------------------------------------
 -- PROBLEM #6
@@ -111,7 +112,17 @@ prob12 tree = and
 -- поддерево, в корне которого находится значение, если оно
 -- есть в дереве поиска; если его нет - вернуть Nothing
 prob13 :: Ord a => a -> Tree a -> Maybe (Tree a)
-prob13 = error "Implement me!"
+prob13 value tree
+    | value == (tree & root) = Just tree
+    | otherwise = msum [tryGetFromLeft, tryGetFromRight]
+    where
+        tryGetFromLeft = do
+            leftSubTree <- tree & left
+            prob13 value leftSubTree
+
+        tryGetFromRight = do
+            rightSubTree <- tree & right
+            prob13 value rightSubTree
 
 ------------------------------------------------------------
 -- PROBLEM #14
