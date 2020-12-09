@@ -6,9 +6,6 @@ module Part1
   , prob5
   ) where
 
-import Data.Foldable (find)
-
-
 ------------------------------------------------------------
 -- PROBLEM #1
 --

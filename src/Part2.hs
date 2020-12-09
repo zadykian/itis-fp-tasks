@@ -2,13 +2,19 @@ module Part2 where
 
 import Part2.Types
 
+import Data.Function ((&))
+import Data.List(nub, find)
+
 ------------------------------------------------------------
 -- PROBLEM #6
 --
 -- Написать функцию, которая преобразует значение типа
 -- ColorLetter в символ, равный первой букве значения
 prob6 :: ColorLetter -> Char
-prob6 = error "Implement me!"
+prob6 colorLetter = case colorLetter of
+    RED   -> 'R'
+    GREEN -> 'G'
+    BLUE  -> 'B'
 
 ------------------------------------------------------------
 -- PROBLEM #7
@@ -16,7 +22,8 @@ prob6 = error "Implement me!"
 -- Написать функцию, которая проверяет, что значения
 -- находятся в диапазоне от 0 до 255 (границы входят)
 prob7 :: ColorPart -> Bool
-prob7 = error "Implement me!"
+prob7 colorPart = asInt >= 0 && asInt <= 255
+    where asInt = prob9 colorPart
 
 ------------------------------------------------------------
 -- PROBLEM #8
@@ -24,7 +31,10 @@ prob7 = error "Implement me!"
 -- Написать функцию, которая добавляет в соответствующее
 -- поле значения Color значение из ColorPart
 prob8 :: Color -> ColorPart -> Color
-prob8 = error "Implement me!"
+prob8 color colorPart = case colorPart of
+    Red   redValue   -> color { red   = (color & red)   + redValue   }
+    Green greenValue -> color { green = (color & green) + greenValue }
+    Blue  blueValue  -> color { blue  = (color & blue)  + blueValue  }
 
 ------------------------------------------------------------
 -- PROBLEM #9
@@ -32,7 +42,10 @@ prob8 = error "Implement me!"
 -- Написать функцию, которая возвращает значение из
 -- ColorPart
 prob9 :: ColorPart -> Int
-prob9 = error "Implement me!"
+prob9 colorPart = case colorPart of
+    Red int   -> int
+    Green int -> int
+    Blue int  -> int
 
 ------------------------------------------------------------
 -- PROBLEM #10
@@ -40,7 +53,18 @@ prob9 = error "Implement me!"
 -- Написать функцию, которая возвращает компонент Color, у
 -- которого наибольшее значение (если такой единственный)
 prob10 :: Color -> Maybe ColorPart
-prob10 = error "Implement me!"
+prob10 color
+    | hasDuplicates valuesList = Nothing
+    | otherwise = find (\part -> prob9 part == maximum valuesList) colorsList
+    where
+        colorsList = 
+            [
+                Red   $ color & red,
+                Green $ color & green,
+                Blue  $ color & blue
+            ]
+        valuesList = map prob9 colorsList
+        hasDuplicates list = length list /= length (nub list)
 
 ------------------------------------------------------------
 -- PROBLEM #11
