@@ -105,23 +105,14 @@ prob5 n k = all (< k) (getPrimeDivisors n)
     where
         -- Получить все простые делители числа.
         getPrimeDivisors :: Integer -> [Integer]
-        getPrimeDivisors number = getPrimeDivisorsWithCurrentPrime number 2
+        getPrimeDivisors number = filter isPrime $ getAllDivisors number
 
-        getPrimeDivisorsWithCurrentPrime :: Integer -> Integer -> [Integer]
-        getPrimeDivisorsWithCurrentPrime inputNumber currentPrime
-            | inputNumber `mod` currentPrime == 0
-                = currentPrime : getPrimeDivisorsWithCurrentPrime (inputNumber `div` currentPrime) currentPrime
-            | inputNumber `elem` primeNumbers = [inputNumber]
-            | inputNumber == 1 = []
-            | otherwise = getPrimeDivisorsWithCurrentPrime inputNumber $ getNextPrime currentPrime
+        -- Является ли число простым.
+        isPrime :: Integer -> Bool
+        isPrime 1 = False
+        isPrime number = getAllDivisors number == [1, number]
 
-        -- Получить следующее простое число.
-        getNextPrime :: Integer -> Integer
-        getNextPrime currentPrime = case find (> currentPrime) primeNumbers of
-            Just nextPrime -> nextPrime
-            Nothing -> error "input number is too large!"
-
-        -- Список простых чисел.
-        primeNumbers :: [Integer]
-        primeNumbers = sieve (2 : [3, 5..])
-            where sieve (p:xs) = p : sieve [x | x <- xs, x `mod` p > 0]
+        -- Получить все делители числа.
+        getAllDivisors :: Integer -> [Integer]
+        getAllDivisors 1 = [1]
+        getAllDivisors number = 1 : [x | x <- [2..(number `div` 2)], number `mod` x == 0] ++ [number]
