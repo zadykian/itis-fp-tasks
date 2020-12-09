@@ -97,12 +97,16 @@ tree2 = Tree (Just $ Tree (Just $ Tree Nothing 1 Nothing)
 --  / \
 -- 3   2
 tree3 :: Tree Int
-tree3 = Tree (Just $ Tree Nothing 3 Nothing) 1 (Just $ Tree Nothing 2 Nothing)
+tree3 = Tree 
+    (Just $ Tree Nothing 3 Nothing) 
+    1
+    (Just $ Tree Nothing 2 Nothing)
 
 tree4 :: Tree ()
-tree4 = Tree (Just $ Tree Nothing () Nothing)
-             ()
-             (Just $ Tree Nothing () Nothing)
+tree4 = Tree 
+    (Just $ Tree Nothing () Nothing)
+    ()
+    (Just $ Tree Nothing () Nothing)
 
 -- ((x x nil) x nil)
 --     X

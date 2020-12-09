@@ -98,7 +98,7 @@ prob12 tree = and
         rightIsSearchTree = maybe True prob12 $ tree & right
 
         leftValueIsLess = maybe True
-            (\leftSubTree -> (leftSubTree & root) < (tree & root)) 
+            (\leftSubTree -> (leftSubTree & root) < (tree & root))
             $ tree & left
 
         rightValueIsMoreOrEqual = maybe True
@@ -130,7 +130,17 @@ prob13 value tree
 -- Заменить () на числа в порядке обхода "правый, левый,
 -- корень", начиная с 1
 prob14 :: Tree () -> Tree Int
-prob14 = error "Implement me!"
+prob14 = traverse 1
+    where
+        traverse :: Int -> Tree () -> Tree Int
+        traverse nodeNumber tree = Tree
+            (Just $ traverse (succ succ nodeNumber) (tree & left))
+            nodeNumber
+            (Just $ traverse (succ nodeNumber) (tree ))
+            
+        traverseLeft tree = do
+            leftSubTree <- tree & left
+            return $ traverse (succ succ nodeNumber) leftSubTree
 
 ------------------------------------------------------------
 -- PROBLEM #15
