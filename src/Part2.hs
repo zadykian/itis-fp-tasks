@@ -130,17 +130,17 @@ prob13 value tree
 -- Заменить () на числа в порядке обхода "правый, левый,
 -- корень", начиная с 1
 prob14 :: Tree () -> Tree Int
-prob14 = traverse 1
+prob14 = traverseTree 1
     where
-        traverse :: Int -> Tree () -> Tree Int
-        traverse nodeNumber tree = Tree
-            (Just $ traverse (succ succ nodeNumber) (tree & left))
+        traverseTree :: Int -> Tree () -> Tree Int
+        traverseTree nodeNumber tree = Tree
+            (do
+                leftSubTree <- tree & left
+                return $ traverseTree (succ $ succ nodeNumber) leftSubTree)
             nodeNumber
-            (Just $ traverse (succ nodeNumber) (tree ))
-            
-        traverseLeft tree = do
-            leftSubTree <- tree & left
-            return $ traverse (succ succ nodeNumber) leftSubTree
+            (do
+                rightSubTree <- tree & right
+                return $ traverseTree (succ nodeNumber) rightSubTree)
 
 ------------------------------------------------------------
 -- PROBLEM #15
