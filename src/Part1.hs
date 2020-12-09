@@ -6,6 +6,9 @@ module Part1
   , prob5
   ) where
 
+import Data.Foldable (find)
+
+
 ------------------------------------------------------------
 -- PROBLEM #1
 --
@@ -15,7 +18,7 @@ module Part1
 --
 -- На вход функции подаются неотрицательные числа
 prob1 :: Int -> Int
-prob1 x = error "Implement me!"
+prob1 number = (3 * number + 123) `mod` 65537
 
 
 ------------------------------------------------------------
@@ -25,7 +28,9 @@ prob1 x = error "Implement me!"
 -- * нечётные числа увеличивает втрое и добавляет единицу
 -- * чётные числа делит на два
 prob2 :: Integer -> Integer
-prob2 n = error "Implement me!"
+prob2 number
+    | even number = number `div` 2
+    | otherwise = number * 3 + 1
 
 
 ------------------------------------------------------------
@@ -50,8 +55,13 @@ prob2 n = error "Implement me!"
 --
 -- Для любой функции step и n == 1 ответом будет 0.
 prob3 :: (Integer -> Integer) -> Integer -> Integer
-prob3 step n = error "Implement me!"
-
+prob3 stepFunc number = funcWithCounter number 0
+    where
+        funcWithCounter :: Integer -> Integer -> Integer
+        funcWithCounter 1 counter = counter
+        funcWithCounter currentNumber counter = funcWithCounter 
+            (stepFunc currentNumber)
+            (succ counter)
 
 ------------------------------------------------------------
 -- PROBLEM #4
@@ -68,7 +78,18 @@ prob3 step n = error "Implement me!"
 --
 -- Число n по модулю не превосходит 10^5
 prob4 :: Integer -> Integer
-prob4 n = error "Implement me!"
+prob4 seqIndex
+    | seqIndex >= 0 = positive 1 1 seqIndex
+    | otherwise = negative 1 1 seqIndex
+    where
+        positive first second currentSeqIndex 
+            | currentSeqIndex == 0 = first
+            | otherwise = positive second (first + second) (pred currentSeqIndex)
+
+        negative first second currentSeqIndex
+            | currentSeqIndex == 0 = second
+            | otherwise = negative second (first - second) (succ currentSeqIndex)
+    
 
 
 ------------------------------------------------------------
@@ -80,4 +101,18 @@ prob4 n = error "Implement me!"
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
 prob5 :: Integer -> Integer -> Bool
-prob5 = error "Implement me!"
+prob5 n k = all (< k) (getPrimeDivisors n)
+    where
+        -- Получить все простые делители числа.
+        getPrimeDivisors :: Integer -> [Integer]
+        getPrimeDivisors number = filter isPrime $ getAllDivisors number
+
+        -- Является ли число простым.
+        isPrime :: Integer -> Bool
+        isPrime 1 = False
+        isPrime number = getAllDivisors number == [1, number]
+
+        -- Получить все делители числа.
+        getAllDivisors :: Integer -> [Integer]
+        getAllDivisors 1 = [1]
+        getAllDivisors number = 1 : [x | x <- [2..(number `div` 2)], number `mod` x == 0] ++ [number]
