@@ -6,6 +6,9 @@ module Part1
   , prob5
   ) where
 
+import Data.Foldable (find)
+
+
 ------------------------------------------------------------
 -- PROBLEM #1
 --
@@ -98,7 +101,27 @@ prob4 seqIndex
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
 prob5 :: Integer -> Integer -> Bool
-prob5 n k = all (<= k) (getPrimeDivisors n)
+prob5 n k = all (< k) (getPrimeDivisors n)
     where
+        -- Получить все простые делители числа.
         getPrimeDivisors :: Integer -> [Integer]
-        getPrimeDivisors = undefined
+        getPrimeDivisors number = getPrimeDivisorsWithCurrentPrime number 2
+
+        getPrimeDivisorsWithCurrentPrime :: Integer -> Integer -> [Integer]
+        getPrimeDivisorsWithCurrentPrime inputNumber currentPrime
+            | inputNumber `mod` currentPrime == 0
+                = currentPrime : getPrimeDivisorsWithCurrentPrime (inputNumber `div` currentPrime) currentPrime
+            | inputNumber `elem` primeNumbers = [inputNumber]
+            | inputNumber == 1 = []
+            | otherwise = getPrimeDivisorsWithCurrentPrime inputNumber $ getNextPrime currentPrime
+
+        -- Получить следующее простое число.
+        getNextPrime :: Integer -> Integer
+        getNextPrime currentPrime = case find (> currentPrime) primeNumbers of
+            Just nextPrime -> nextPrime
+            Nothing -> error "input number is too large!"
+
+        -- Список простых чисел.
+        primeNumbers :: [Integer]
+        primeNumbers = sieve (2 : [3, 5..])
+            where sieve (p:xs) = p : sieve [x | x <- xs, x `mod` p > 0]
