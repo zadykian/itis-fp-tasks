@@ -148,7 +148,12 @@ prob14 = traverseTree 1
 -- Выполнить вращение дерева влево относительно корня
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob15 :: Tree a -> Tree a
-prob15 = error "Implement me!"
+prob15 tree = maybe tree leftRotation $ tree & right
+    where
+        leftRotation rightSubTree = Tree
+            (Just tree { right = rightSubTree & left })
+            (rightSubTree & root)
+            (rightSubTree & right)
 
 ------------------------------------------------------------
 -- PROBLEM #16
