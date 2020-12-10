@@ -3,8 +3,8 @@ module Part2 where
 import Part2.Types
 
 import Data.Function ((&))
-import Data.List(nub, find)
-import Control.Monad(msum)
+import Data.List (nub, find)
+import Control.Monad (msum)
 
 ------------------------------------------------------------
 -- PROBLEM #6
@@ -167,7 +167,6 @@ prob16 tree = maybe tree rightRotation $ tree & left
             ( leftSubTree & left                       )
             ( leftSubTree & root                       )
             ( Just tree { left = leftSubTree & right } )
-        
 
 ------------------------------------------------------------
 -- PROBLEM #17
