@@ -173,4 +173,18 @@ prob16 tree = maybe tree rightRotation $ tree & left
 -- разница высот поддеревьев не превосходила по модулю 1
 -- (например, преобразовать в полное бинарное дерево)
 prob17 :: Tree a -> Tree a
-prob17 = error "Implement me!"
+prob17 currentTree
+    | isBalanced currentTree = currentTree
+    | otherwise = undefined
+    where
+
+        -- Сбалансировано ли дерево.
+        isBalanced :: Tree a -> Bool
+        isBalanced tree = abs (getHeight (tree & left) - getHeight (tree & right)) <= 1
+
+        -- Получить высоту дерева.
+        getHeight :: Maybe (Tree a) -> Integer
+        getHeight Nothing = 0
+        getHeight (Just tree) = succ $ max
+            (getHeight $ tree & left)
+            (getHeight $ tree & left)
