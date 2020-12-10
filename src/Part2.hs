@@ -150,10 +150,9 @@ prob14 = traverseTree 1
 prob15 :: Tree a -> Tree a
 prob15 tree = maybe tree leftRotation $ tree & right
     where
-        leftRotation rightSubTree = Tree
-            ( Just tree { right = rightSubTree & left } )
-            ( rightSubTree & root                       )
-            ( rightSubTree & right                      )
+        leftRotation rightSubTree = rightSubTree { left = Just oldRoot }
+            where
+                oldRoot = tree { right = rightSubTree & left }
 
 ------------------------------------------------------------
 -- PROBLEM #16
@@ -163,10 +162,9 @@ prob15 tree = maybe tree leftRotation $ tree & right
 prob16 :: Tree a -> Tree a
 prob16 tree = maybe tree rightRotation $ tree & left
     where
-        rightRotation leftSubTree = Tree
-            ( leftSubTree & left                       )
-            ( leftSubTree & root                       )
-            ( Just tree { left = leftSubTree & right } )
+        rightRotation leftSubTree = leftSubTree { right = Just oldRoot }
+            where
+                oldRoot = tree { left = leftSubTree & right }
 
 ------------------------------------------------------------
 -- PROBLEM #17
