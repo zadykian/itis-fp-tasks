@@ -180,7 +180,10 @@ prob17 currentTree
 
         -- Сбалансировано ли дерево.
         isBalanced :: Tree a -> Bool
-        isBalanced tree = abs (getHeight (tree & left) - getHeight (tree & right)) <= 1
+        isBalanced tree =
+            abs (getHeight (tree & left) - getHeight (tree & right)) <= 1
+            && maybe True isBalanced (tree & left)
+            && maybe True isBalanced (tree & right)
 
         -- Получить высоту дерева.
         getHeight :: Maybe (Tree a) -> Integer
