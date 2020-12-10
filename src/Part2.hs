@@ -114,15 +114,15 @@ prob12 tree = and
 prob13 :: Ord a => a -> Tree a -> Maybe (Tree a)
 prob13 value tree
     | value == (tree & root) = Just tree
-    | otherwise = msum [tryGetFromLeft, tryGetFromRight]
-    where
-        tryGetFromLeft = do
-            leftSubTree <- tree & left
-            prob13 value leftSubTree
-
-        tryGetFromRight = do
-            rightSubTree <- tree & right
-            prob13 value rightSubTree
+    | otherwise = msum
+        [
+            do
+                leftSubTree <- tree & left
+                prob13 value leftSubTree,
+            do
+                rightSubTree <- tree & right
+                prob13 value rightSubTree
+        ]
 
 ------------------------------------------------------------
 -- PROBLEM #14
