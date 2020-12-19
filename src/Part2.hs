@@ -187,7 +187,20 @@ prob16 tree = maybe tree rightRotation $ tree & left
 prob17 :: Tree a -> Tree a
 prob17 currentTree
     | isBalanced currentTree = currentTree
-    | otherwise = undefined
+    | otherwise = 
+        if getHeight (currentTree & left) - getHeight (currentTree & right) > 1
+        then
+            (
+                if getHeight ((currentTree & left) >>= left) > getHeight ((currentTree & left) >>= right)
+                then prob16 currentTree
+                else leftRightRotation currentTree
+            )
+        else
+            (
+                if getHeight ((currentTree & right) >>= left) > getHeight ((currentTree & right) >>= right)
+                then prob16 currentTree
+                else leftRightRotation currentTree
+            )
     where
 
         -- Сбалансировано ли дерево.
