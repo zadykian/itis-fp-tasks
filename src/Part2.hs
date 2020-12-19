@@ -130,17 +130,29 @@ prob13 value tree
 -- Заменить () на числа в порядке обхода "правый, левый,
 -- корень", начиная с 1
 prob14 :: Tree () -> Tree Int
-prob14 = traverseTree 1
+prob14 unitTree = traverseTree (getNodesCount unitTree) unitTree
     where
         traverseTree :: Int -> Tree () -> Tree Int
         traverseTree nodeNumber tree = Tree
             (do
                 leftSubTree <- tree & left
-                return $ traverseTree (succ $ succ nodeNumber) leftSubTree)
+                return $ traverseTree (pred nodeNumber) leftSubTree)
             nodeNumber
             (do
                 rightSubTree <- tree & right
-                return $ traverseTree (succ nodeNumber) rightSubTree)
+                return $ traverseTree (getRightDecrementFunc tree nodeNumber) rightSubTree)
+
+        getRightDecrementFunc :: Tree a -> (Int -> Int)
+        getRightDecrementFunc tree = case tree & left of
+            Just _ -> pred . pred
+            Nothing -> pred
+
+        getNodesCount :: Tree a -> Int
+        getNodesCount tree = succ $ sum
+            [
+                maybe 0 getNodesCount (tree & left),
+                maybe 0 getNodesCount (tree & right)
+            ]
 
 ------------------------------------------------------------
 -- PROBLEM #15
