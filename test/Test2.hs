@@ -54,6 +54,8 @@ test10 = testGroup "P10"
     prob10 (Color 100 50 0) @?= Just (Red 100)
   , testCase "prob10 (100,100,100) == Nothing" $
     prob10 (Color 100 100 100) @?= Nothing
+  , testCase "prob 10 (10, 100, 10) == Just (G 100)" $
+    prob10 (Color 10 100 10) @?= Just (Green 100)
   ]
 
 -- (1 2 (3 4 (5 6 nil)))

@@ -55,7 +55,7 @@ prob9 colorPart = case colorPart of
 -- которого наибольшее значение (если такой единственный)
 prob10 :: Color -> Maybe ColorPart
 prob10 color
-    | hasDuplicates valuesList = Nothing
+    | length getMaxValues > 1 = Nothing
     | otherwise = find (\part -> prob9 part == maximum valuesList) colorsList
     where
         colorsList =
@@ -65,7 +65,7 @@ prob10 color
                 Blue  $ color & blue
             ]
         valuesList = map prob9 colorsList
-        hasDuplicates list = length list /= length (nub list)
+        getMaxValues = filter (\part -> prob9 part == maximum valuesList) colorsList
 
 ------------------------------------------------------------
 -- PROBLEM #11
