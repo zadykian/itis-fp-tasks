@@ -203,3 +203,21 @@ prob17 currentTree
         getHeight (Just tree) = succ $ max
             (getHeight $ tree & left)
             (getHeight $ tree & left)
+
+        -- Выполнить большее левое вращение дерева.
+        rightLeftRotation :: Tree a -> Tree a
+        rightLeftRotation tree = prob15 $ tree 
+            { 
+                right = do 
+                    rightSubTree <- tree & right
+                    return $ prob16 rightSubTree
+            }
+
+        -- Выполнить большое правое вращение дерева.
+        leftRightRotation :: Tree a -> Tree a
+        leftRightRotation tree = prob16 $ tree
+            {
+                left = do
+                    leftSubTree <- tree & left
+                    return $ prob15 leftSubTree
+            }
