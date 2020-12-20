@@ -6,8 +6,7 @@ module Part1
   , prob5
   ) where
 
-import Data.Foldable (find)
-
+import Data.Numbers.Primes (primeFactors)
 
 ------------------------------------------------------------
 -- PROBLEM #1
@@ -20,7 +19,6 @@ import Data.Foldable (find)
 prob1 :: Int -> Int
 prob1 number = (3 * number + 123) `mod` 65537
 
-
 ------------------------------------------------------------
 -- PROBLEM #2
 --
@@ -31,7 +29,6 @@ prob2 :: Integer -> Integer
 prob2 number
     | even number = number `div` 2
     | otherwise = number * 3 + 1
-
 
 ------------------------------------------------------------
 -- PROBLEM #3
@@ -89,8 +86,6 @@ prob4 seqIndex
         negative first second currentSeqIndex
             | currentSeqIndex == 0 = second
             | otherwise = negative second (first - second) (succ currentSeqIndex)
-    
-
 
 ------------------------------------------------------------
 -- PROBLEM #5
@@ -101,18 +96,4 @@ prob4 seqIndex
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
 prob5 :: Integer -> Integer -> Bool
-prob5 n k = all (< k) (getPrimeDivisors n)
-    where
-        -- Получить все простые делители числа.
-        getPrimeDivisors :: Integer -> [Integer]
-        getPrimeDivisors number = filter isPrime $ getAllDivisors number
-
-        -- Является ли число простым.
-        isPrime :: Integer -> Bool
-        isPrime 1 = False
-        isPrime number = getAllDivisors number == [1, number]
-
-        -- Получить все делители числа.
-        getAllDivisors :: Integer -> [Integer]
-        getAllDivisors 1 = [1]
-        getAllDivisors number = 1 : [x | x <- [2..(number `div` 2)], number `mod` x == 0] ++ [number]
+prob5 n k = all (< k) (primeFactors n)
