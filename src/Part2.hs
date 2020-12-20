@@ -208,7 +208,16 @@ prob17 tree
         in performRotations withHandledSubTrees
     where
         performRotations :: Tree a -> Tree a
-        performRotations = undefined
+        performRotations currentTree
+            | getHeight (currentTree & left) - getHeight (currentTree & right) > 1 =
+                if getHeight (currentTree & left >>= left) > getHeight (currentTree & left >>= right)
+                then prob16 currentTree
+                else leftRightRotation currentTree
+
+            | otherwise =
+                if getHeight (currentTree & right >>= left) > getHeight (currentTree & right >>= right)
+                then rightLeftRotation currentTree
+                else prob15 currentTree
 
 -- Сбалансировано ли дерево.
 isBalanced :: Tree a -> Bool
