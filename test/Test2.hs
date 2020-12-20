@@ -271,7 +271,16 @@ tree13 = Tree
 --  /   / \
 -- 1   4   6
 tree14 :: Tree Int
-tree14 = undefined
+tree14 = Tree
+    (Just $ Tree
+        (Just $ Tree Nothing 1 Nothing)
+        2
+        Nothing)
+    3
+    (Just $ Tree
+        (Just $ Tree Nothing 4 Nothing)
+        5
+        (Just $ Tree Nothing 6 Nothing))
 
 test11 :: TestTree
 test11 = testGroup "P11"
