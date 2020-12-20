@@ -51,3 +51,4 @@ test-suite track-two-test
                      , smallcheck >= 1.1
                      , hedgehog >= 1.0
                      , quickcheck-classes >= 0.6
+                     , primes
