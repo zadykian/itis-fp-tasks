@@ -195,14 +195,20 @@ prob16 tree = maybe tree rightRotation $ tree & left
 prob17 :: Tree a -> Tree a
 prob17 tree
     | isBalanced tree = tree
-
-    | getHeight (tree & left) - getHeight (tree & right) > 1 =
-        if getHeight ((tree & left) >>= left) > getHeight ((tree & left) >>= right)
-        then prob16 tree
-        else leftRightRotation tree
-    
-    | getHeight ((tree & right) >>= left) > getHeight ((tree & right) >>= right) = prob16 tree
-    | otherwise  = leftRightRotation tree
+    | otherwise =
+        let withHandledSubTrees = tree
+                {
+                    left = do
+                        leftSubTree <- tree & left
+                        return $ prob17 leftSubTree,
+                    right = do
+                        rightSubTree <- tree & right
+                        return $ prob17 rightSubTree
+                }
+        in performRotations withHandledSubTrees
+    where
+        performRotations :: Tree a -> Tree a
+        performRotations = undefined
 
 -- Сбалансировано ли дерево.
 isBalanced :: Tree a -> Bool
