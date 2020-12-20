@@ -226,9 +226,23 @@ tree11 = Tree
                     5
                     Nothing))))
 
--- todo
+-- ((nil 1 2) 3 (nil 4 5))
+--   3
+--  / \
+-- 1   4
+--  \   \
+--   2   5
 tree12 :: Tree Int
-tree12 = undefined
+tree12 = Tree
+    (Just $ Tree
+        Nothing
+        1
+        (Just $ Tree Nothing 2 Nothing))
+    3
+    (Just $ Tree
+        Nothing
+        4
+        (Just $ Tree Nothing 5 Nothing))
 
 -- ((1 2 (nil 3 4)) 5 6)
 --     5
