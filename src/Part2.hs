@@ -3,7 +3,7 @@ module Part2 where
 import Part2.Types
 
 import Data.Function ((&))
-import Data.List (nub, find)
+import Data.List (find)
 import Control.Monad (msum)
 
 ------------------------------------------------------------
@@ -157,8 +157,12 @@ prob14 unitTree = traverseTree (getNodesCount unitTree) unitTree
 ------------------------------------------------------------
 -- PROBLEM #15
 --
--- Выполнить вращение дерева влево относительно корня
--- (https://en.wikipedia.org/wiki/Tree_rotation)
+-- Выполнить вращение дерева влево относительно корня:
+-- 4
+--  \          6
+--   6   =>   / \
+--    \      4   8
+--     8
 prob15 :: Tree a -> Tree a
 prob15 tree = maybe tree leftRotation $ tree & right
     where
@@ -169,8 +173,12 @@ prob15 tree = maybe tree leftRotation $ tree & right
 ------------------------------------------------------------
 -- PROBLEM #16
 --
--- Выполнить вращение дерева вправо относительно корня
--- (https://en.wikipedia.org/wiki/Tree_rotation)
+-- Выполнить вращение дерева вправо относительно корня:
+--     8
+--    /        6
+--   6   =>   / \
+--  /        4   8
+-- 4
 prob16 :: Tree a -> Tree a
 prob16 tree = maybe tree rightRotation $ tree & left
     where
@@ -185,52 +193,55 @@ prob16 tree = maybe tree rightRotation $ tree & left
 -- разница высот поддеревьев не превосходила по модулю 1
 -- (например, преобразовать в полное бинарное дерево)
 prob17 :: Tree a -> Tree a
-prob17 currentTree
-    | isBalanced currentTree = currentTree
-    | otherwise = 
-        if getHeight (currentTree & left) - getHeight (currentTree & right) > 1
-        then
-            (
-                if getHeight ((currentTree & left) >>= left) > getHeight ((currentTree & left) >>= right)
-                then prob16 currentTree
-                else leftRightRotation currentTree
-            )
-        else
-            (
-                if getHeight ((currentTree & right) >>= left) > getHeight ((currentTree & right) >>= right)
-                then prob16 currentTree
-                else leftRightRotation currentTree
-            )
-    where
+prob17 tree
+    | isBalanced tree = tree
 
-        -- Сбалансировано ли дерево.
-        isBalanced :: Tree a -> Bool
-        isBalanced tree =
-            abs (getHeight (tree & left) - getHeight (tree & right)) <= 1
-            && maybe True isBalanced (tree & left)
-            && maybe True isBalanced (tree & right)
+    | getHeight (tree & left) - getHeight (tree & right) > 1 =
+        if getHeight ((tree & left) >>= left) > getHeight ((tree & left) >>= right)
+        then prob16 tree
+        else leftRightRotation tree
+    
+    | getHeight ((tree & right) >>= left) > getHeight ((tree & right) >>= right) = prob16 tree
+    | otherwise  = leftRightRotation tree
 
-        -- Получить высоту дерева.
-        getHeight :: Maybe (Tree a) -> Integer
-        getHeight Nothing = 0
-        getHeight (Just tree) = succ $ max
-            (getHeight $ tree & left)
-            (getHeight $ tree & left)
+-- Сбалансировано ли дерево.
+isBalanced :: Tree a -> Bool
+isBalanced tree =
+    abs (getHeight (tree & left) - getHeight (tree & right)) <= 1
+    && maybe True isBalanced (tree & left)
+    && maybe True isBalanced (tree & right)
 
-        -- Выполнить большее левое вращение дерева.
-        rightLeftRotation :: Tree a -> Tree a
-        rightLeftRotation tree = prob15 $ tree 
-            { 
-                right = do 
-                    rightSubTree <- tree & right
-                    return $ prob16 rightSubTree
-            }
+-- Получить высоту дерева.
+getHeight :: Maybe (Tree a) -> Integer
+getHeight Nothing = 0
+getHeight (Just tree) = succ $ max
+    (getHeight $ tree & left)
+    (getHeight $ tree & left)
 
-        -- Выполнить большое правое вращение дерева.
-        leftRightRotation :: Tree a -> Tree a
-        leftRightRotation tree = prob16 $ tree
-            {
-                left = do
-                    leftSubTree <- tree & left
-                    return $ prob15 leftSubTree
-            }
+-- Выполнить большее правое (RL) вращение дерева.
+-- 4       4
+--  \       \          6
+--   8  =>   6   =>   / \
+--  /         \      4   8
+-- 6           8
+rightLeftRotation :: Tree a -> Tree a
+rightLeftRotation tree = prob15 $ tree 
+    { 
+        right = do 
+            rightSubTree <- tree & right
+            return $ prob16 rightSubTree
+    }
+
+-- Выполнить большое левое (LR) вращение дерева.
+--   8         8
+--  /         /        6
+-- 4    =>   6   =>   / \
+--  \       /        4   8
+--   6     4
+leftRightRotation :: Tree a -> Tree a
+leftRightRotation tree = prob16 $ tree
+    {
+        left = do
+            leftSubTree <- tree & left
+            return $ prob15 leftSubTree
+    }

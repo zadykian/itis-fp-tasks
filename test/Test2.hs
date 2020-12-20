@@ -1,8 +1,6 @@
 module Test2 (tests2) where
 
 import Test.Tasty
-import Test.Tasty.SmallCheck as SC
-import Test.Tasty.Hedgehog as HH
 import Test.Tasty.HUnit
 
 import Part2.Types
@@ -116,6 +114,46 @@ tree5 = Tree (Just $ Tree (Just $ Tree Nothing () Nothing)
              ()
              Nothing
 
+-- (nil 4 (6 8 nil))
+-- 4
+--  \
+--   8
+--  /
+-- 6
+tree6 :: Tree Int
+tree6 = Tree
+    Nothing
+    4
+    (Just $ Tree
+        (Just $ Tree Nothing 6 Nothing)
+        8
+        Nothing)
+
+-- ((nil 4 6) 8 nil)
+--   8
+--  /
+-- 4
+--  \
+--   6
+tree7 :: Tree Int
+tree7 = Tree
+    (Just $ Tree
+        Nothing
+        4
+        (Just $ Tree Nothing 6 Nothing))
+    8
+    Nothing
+
+-- (4 6 8)
+--   6
+--  / \
+-- 4   8
+tree8 :: Tree Int
+tree8 = Tree
+    (Just $ Tree Nothing 4 Nothing)
+    6
+    (Just $ Tree Nothing 8 Nothing)
+
 test11 :: TestTree
 test11 = testGroup "P11"
   [ testCase "prob11 (1 2 (3 4 (5 6 nil))) == 21" $ prob11 tree1 @?= 21
@@ -143,7 +181,7 @@ test14 = testGroup "P14"
   [ testCase "prob14 (x x x) == (2 3 1)" $
     prob14 tree4 @?= tree3
   , testCase "prob14 (nil x (x x x)) == (nil 4 (2 3 1))" $
-    prob14 (Tree Nothing () (Just tree4)) @?= (Tree Nothing 4 (Just tree3))
+    prob14 (Tree Nothing () (Just tree4)) @?= Tree Nothing 4 (Just tree3)
   ]
 
 test15 :: TestTree
@@ -162,9 +200,15 @@ test16 = testGroup "P16"
     prob16 tree5 @?= tree4
   ]
 
+test17 :: TestTree
 test17 = testGroup "P17"
   [ testCase "prob17 (1 2 (3 4 (5 6 nil))) == ((1 2 3) 4 (5 6 nil))" $
     prob17 tree1 @?= tree2
   , testCase "prob17 ((x x nil) x nil) == (x x x)" $
     prob17 tree5 @?= tree4
+
+  , testCase "prob17-RL (nil 4 (6 8 nil)) == (4 6 8)" $
+    rightLeftRotation tree6 @?= tree8
+  , testCase "prob17-LR ((nil 4 6) 8 nil) == (4 6 8)" $
+    leftRightRotation tree7 @?= tree8
   ]
