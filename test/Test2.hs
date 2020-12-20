@@ -226,21 +226,6 @@ tree11 = Tree
                     5
                     Nothing))))
 
--- (1 2 (3 4 5))
---   2
---  / \
--- 1   4
---    / \
---   3   5
-tree12 :: Tree Int
-tree12 = Tree
-    (Just $ Tree Nothing 1 Nothing)
-    2
-    (Just $ Tree
-        (Just $ Tree Nothing 3 Nothing)
-        4
-        (Just $ Tree Nothing 5 Nothing))
-
 -- ((1 2 (nil 3 4)) 5 6)
 --     5
 --    / \
@@ -260,24 +245,6 @@ tree13 = Tree
             (Just $ Tree Nothing 4 Nothing)))
     5
     (Just $ Tree Nothing 6 Nothing)
-
--- ((1 2 nil) 3 (4 5 6))
---     3
---    / \
---   2   5
---  /   / \
--- 1   4   6
-tree14 :: Tree Int
-tree14 = Tree
-    (Just $ Tree
-        (Just $ Tree Nothing 1 Nothing)
-        2
-        Nothing)
-    3
-    (Just $ Tree
-        (Just $ Tree Nothing 4 Nothing)
-        5
-        (Just $ Tree Nothing 6 Nothing))
 
 -- ((1 2 nil) 3 nil)
 --     3
@@ -329,6 +296,44 @@ tree17 = Tree
         (Just $ Tree Nothing 2 Nothing)
         3
         (Just $ Tree Nothing 1 Nothing))
+        
+-- (nil 0 (nil 1 (nil 2 (nil 3 (nil 4 (nil 5 (nil 6)))))))
+-- 0
+--  \
+--   1
+--    \
+--     2
+--      \
+--       3
+--        \
+--         4
+--          \
+--           5
+--            \
+--             6
+tree18 :: Tree Int
+tree18 = Tree
+    Nothing
+    0
+    (Just $ Tree
+        Nothing
+        1
+        (Just $ Tree
+            Nothing
+            2
+            (Just $ Tree
+                Nothing
+                3
+                (Just $ Tree
+                    Nothing
+                    4
+                    (Just $ Tree
+                        Nothing
+                        5
+                        (Just $ Tree
+                            Nothing
+                            6
+                            Nothing))))))
 
 test11 :: TestTree
 test11 = testGroup "P11"
@@ -388,14 +393,16 @@ test16 = testGroup "P16"
 
 test17 :: TestTree
 test17 = testGroup "P17"
-  [ testCase "prob17 (1 2 (3 4 (5 6 nil))) == ((1 2 3) 4 (5 6 nil))" $
-    prob17 tree1 @?= tree2
+  [ testCase "prob17 (1 2 (3 4 (5 6 nil)))" $
+    isBalancedSearchTree (prob17 tree1) @?= True
   , testCase "prob17 ((x x nil) x nil) == (x x x)" $
     prob17 tree5 @?= tree4
-  , testCase "prob17 (nil 1 (nil 2 (nil 3 (nil 4 5)))) == (1 2 (3 4 5))" $
-    prob17 tree11 @?= tree12
-  , testCase "prob17 ((1 2 (nil 3 4)) 5 6) == ((1 2 nil) 3 (4 5 6))" $
-    prob17 tree13 @?= tree14
+  , testCase "prob17 (nil 1 (nil 2 (nil 3 (nil 4 5))))" $
+    isBalancedSearchTree (prob17 tree11) @?= True
+  , testCase "prob17 ((1 2 (nil 3 4)) 5 6)" $
+    isBalancedSearchTree (prob17 tree13) @?= True
+  , testCase "prob17 (nil 0 (nil 1 (nil 2 (nil 3 (nil 4 (nil 5 (nil 6)))))))" $
+    isBalancedSearchTree (prob17 tree18) @?= True
 
   , testCase "prob17-RL (nil 4 (6 8 nil)) == (4 6 8)" $
     rightLeftRotation tree6 @?= tree8
@@ -414,3 +421,7 @@ test17 = testGroup "P17"
   , testCase "prob17-getHeight (nil) == 0" $
     getHeight Nothing @?= 0
   ]
+
+-- Является ли дерево сбалансированным деревом поиска.
+isBalancedSearchTree :: Ord a => Tree a -> Bool
+isBalancedSearchTree tree = prob12 tree && isBalanced tree 
