@@ -96,6 +96,10 @@ tree2 = Tree (Just $ Tree (Just $ Tree Nothing 1 Nothing)
 tree3 :: Tree Int
 tree3 = Tree (Just $ Tree Nothing 2 Nothing) 3 (Just $ Tree Nothing 1 Nothing)
 
+-- (x x x)
+--   X
+--  / \
+-- X   X
 tree4 :: Tree ()
 tree4 = Tree (Just $ Tree Nothing () Nothing)
              ()
@@ -154,6 +158,46 @@ tree8 = Tree
     6
     (Just $ Tree Nothing 8 Nothing)
 
+-- (x x (x x (x x nil)))
+--   X
+--  / \
+-- X   X
+--    / \
+--   X   X
+--      /
+--     X
+tree9 :: Tree ()
+tree9 = Tree 
+    (Just $ Tree Nothing () Nothing)
+    ()
+    (Just $ Tree 
+        (Just $ Tree Nothing () Nothing)
+        ()
+        (Just $ Tree 
+            (Just $ Tree Nothing () Nothing)
+            ()
+            Nothing))
+
+-- (5 6 (3 4 (1 2 nil)))
+--   6
+--  / \
+-- 5   4
+--    / \
+--   3   2
+--      /
+--     1
+tree10 :: Tree Int
+tree10 = Tree 
+    (Just $ Tree Nothing 5 Nothing)
+    6
+    (Just $ Tree 
+        (Just $ Tree Nothing 3 Nothing)
+        4
+        (Just $ Tree 
+            (Just $ Tree Nothing 1 Nothing)
+            2
+            Nothing))
+
 test11 :: TestTree
 test11 = testGroup "P11"
   [ testCase "prob11 (1 2 (3 4 (5 6 nil))) == 21" $ prob11 tree1 @?= 21
@@ -166,6 +210,8 @@ test12 = testGroup "P12"
   [ testCase "prob12 (1 2 (3 4 (5 6 nil))) == T" $ prob12 tree1 @?= True
   , testCase "prob12 ((1 2 3) 4 (5 6 nil)) == T" $ prob12 tree2 @?= True
   , testCase "prob12 (2 3 1) == F" $ prob12 tree3 @?= False
+  , testCase "prob12 (nil 4 (6 8 nil)) == T" $ prob12 tree6 @?= True
+  , testCase "prob12 ((nil 4 6) 8 nil) == T" $ prob12 tree7 @?= True
   ]
 
 test13 :: TestTree
@@ -182,6 +228,8 @@ test14 = testGroup "P14"
     prob14 tree4 @?= tree3
   , testCase "prob14 (nil x (x x x)) == (nil 4 (2 3 1))" $
     prob14 (Tree Nothing () (Just tree4)) @?= Tree Nothing 4 (Just tree3)
+  , testCase "prob14 (x x (x x (x x nil))) == (5 6 (3 4 (1 2 nil)))" $
+    prob14 tree9 @?= tree10
   ]
 
 test15 :: TestTree
