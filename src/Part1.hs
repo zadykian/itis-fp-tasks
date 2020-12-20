@@ -6,8 +6,6 @@ module Part1
   , prob5
   ) where
 
-import Data.Numbers.Primes (primeFactors)
-
 ------------------------------------------------------------
 -- PROBLEM #1
 --
@@ -96,4 +94,14 @@ prob4 seqIndex
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
 prob5 :: Integer -> Integer -> Bool
-prob5 n k = all (< k) (primeFactors n)
+prob5 n k = all (< k) (getPrimeDivisors n)
+    where
+        getPrimeDivisors :: Integer -> [Integer]
+        getPrimeDivisors = getDivisorsWithCurrent 2
+
+        getDivisorsWithCurrent :: Integer -> Integer -> [Integer]
+        getDivisorsWithCurrent _ 1 = []
+        getDivisorsWithCurrent divisor number
+            | divisor * divisor > number = [number]
+            | number `mod` divisor == 0 = divisor : getDivisorsWithCurrent divisor (number `div` divisor)
+            | otherwise = getDivisorsWithCurrent (divisor + 1) number
