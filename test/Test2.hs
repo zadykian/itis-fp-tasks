@@ -226,8 +226,38 @@ tree11 = Tree
                     5
                     Nothing))))
 
--- 
+-- todo
 tree12 :: Tree Int
+tree12 = undefined
+
+-- ((1 2 (nil 3 4)) 5 6)
+--     5
+--    / \
+--   2   6
+--  / \
+-- 1   3
+--      \
+--       4
+tree13 :: Tree Int
+tree13 = Tree
+    (Just $ Tree
+        (Just $ Tree Nothing 1 Nothing)
+        2
+        (Just $ Tree
+            Nothing
+            3
+            (Just $ Tree Nothing 4 Nothing)))
+    5
+    (Just $ Tree Nothing 6 Nothing)
+
+-- ((1 2 nil) 3 (4 5 6))
+--     3
+--    / \
+--   2   5
+--  /   / \
+-- 1   4   6
+tree14 :: Tree Int
+tree14 = undefined
 
 test11 :: TestTree
 test11 = testGroup "P11"
@@ -285,8 +315,10 @@ test17 = testGroup "P17"
     prob17 tree1 @?= tree2
   , testCase "prob17 ((x x nil) x nil) == (x x x)" $
     prob17 tree5 @?= tree4
-  , testCase "(nil 1 (nil 2 (nil 3 (nil 4 5))))" $
+  , testCase "prob17 (nil 1 (nil 2 (nil 3 (nil 4 5)))) == " $ --todo
     prob17 tree11 @?= tree12
+  , testCase "prob17 ((1 2 (nil 3 4)) 5 6) == ((1 2 nil) 3 (4 5 6))" $
+    prob17 tree13 @?= tree14
 
   , testCase "prob17-RL (nil 4 (6 8 nil)) == (4 6 8)" $
     rightLeftRotation tree6 @?= tree8
