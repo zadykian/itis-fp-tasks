@@ -426,6 +426,8 @@ test17 = testGroup "P17"
     isBalancedSearchTree (prob17 tree18) @?= True
   , testCase "prob17 ((nil 1 (2 3 nil)) 4 5)" $
     isBalancedSearchTree (prob17 tree19) @?= True
+  , testCase "prob17 (nil 4 (6 8 nil)) == (4 6 8)" $
+    prob17 tree6 @?= tree8
 
   , testCase "prob17-RL (nil 4 (6 8 nil)) == (4 6 8)" $
     rightLeftRotation tree6 @?= tree8

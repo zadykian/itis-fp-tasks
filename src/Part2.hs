@@ -213,6 +213,8 @@ prob17 tree
         -- разности высот поддеревьев (LL, LR, RR, RL).
         performRotations :: Tree a -> Tree a
         performRotations currentTree
+            | isBalanced currentTree = currentTree
+
             | getHeight (currentTree & left) - getHeight (currentTree & right) > 1 =
                 if getHeight (currentTree & left >>= left) > getHeight (currentTree & left >>= right)
                 then prob16 currentTree
