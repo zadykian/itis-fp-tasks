@@ -226,21 +226,18 @@ tree11 = Tree
                     5
                     Nothing))))
 
--- ((nil 1 2) 3 (nil 4 5))
---   3
+-- (1 2 (3 4 5))
+--   2
 --  / \
 -- 1   4
---  \   \
---   2   5
+--    / \
+--   3   5
 tree12 :: Tree Int
 tree12 = Tree
+    (Just $ Tree Nothing 1 Nothing)
+    2
     (Just $ Tree
-        Nothing
-        1
-        (Just $ Tree Nothing 2 Nothing))
-    3
-    (Just $ Tree
-        Nothing
+        (Just $ Tree Nothing 3 Nothing)
         4
         (Just $ Tree Nothing 5 Nothing))
 
@@ -338,7 +335,7 @@ test17 = testGroup "P17"
     prob17 tree1 @?= tree2
   , testCase "prob17 ((x x nil) x nil) == (x x x)" $
     prob17 tree5 @?= tree4
-  , testCase "prob17 (nil 1 (nil 2 (nil 3 (nil 4 5)))) == " $ --todo
+  , testCase "prob17 (nil 1 (nil 2 (nil 3 (nil 4 5)))) == (1 2 (3 4 5))" $
     prob17 tree11 @?= tree12
   , testCase "prob17 ((1 2 (nil 3 4)) 5 6) == ((1 2 nil) 3 (4 5 6))" $
     prob17 tree13 @?= tree14
