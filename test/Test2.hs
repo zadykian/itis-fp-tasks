@@ -198,6 +198,37 @@ tree10 = Tree
             2
             Nothing))
 
+-- (nil 1 (nil 2 (nil 3 (nil 4 5))))
+-- 1
+--  \
+--   2
+--    \
+--     3
+--      \
+--       4
+--        \
+--         5
+tree11 :: Tree Int
+tree11 = Tree
+    Nothing
+    1
+    (Just $ Tree
+        Nothing
+        2
+        (Just $ Tree
+            Nothing
+            3
+            (Just $ Tree
+                Nothing
+                4
+                (Just $ Tree
+                    Nothing
+                    5
+                    Nothing))))
+
+-- 
+tree12 :: Tree Int
+
 test11 :: TestTree
 test11 = testGroup "P11"
   [ testCase "prob11 (1 2 (3 4 (5 6 nil))) == 21" $ prob11 tree1 @?= 21
@@ -254,6 +285,8 @@ test17 = testGroup "P17"
     prob17 tree1 @?= tree2
   , testCase "prob17 ((x x nil) x nil) == (x x x)" $
     prob17 tree5 @?= tree4
+  , testCase "(nil 1 (nil 2 (nil 3 (nil 4 5))))" $
+    prob17 tree11 @?= tree12
 
   , testCase "prob17-RL (nil 4 (6 8 nil)) == (4 6 8)" $
     rightLeftRotation tree6 @?= tree8
