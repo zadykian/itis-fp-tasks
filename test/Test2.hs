@@ -366,7 +366,7 @@ test14 = testGroup "P14"
     prob14 tree5 @?= tree15
   , testCase "prob14 (nil) == (1)" $
     prob14 (Tree Nothing () Nothing) @?= Tree Nothing 1 Nothing
-  , testCase "prob14 ((x x nil) x nil) == ((1 2 nil) 3 nil)" $
+  , testCase "prob14 ((x x x) x (x x x)) == ((5 6 4) 7 (2 3 1))" $
     prob14 tree16 @?= tree17
   ]
 

@@ -144,7 +144,7 @@ prob14 unitTree = traverseTree (getNodesCount unitTree) unitTree
 
         getRightDecrementFunc :: Tree a -> (Int -> Int)
         getRightDecrementFunc tree = case tree & left of
-            Just _ -> pred . pred
+            Just leftSubTree -> subtract (getNodesCount leftSubTree + 1)
             Nothing -> pred
 
         getNodesCount :: Tree a -> Int
