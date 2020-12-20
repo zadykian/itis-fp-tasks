@@ -211,4 +211,16 @@ test17 = testGroup "P17"
     rightLeftRotation tree6 @?= tree8
   , testCase "prob17-LR ((nil 4 6) 8 nil) == (4 6 8)" $
     leftRightRotation tree7 @?= tree8
+
+  , testCase "prob17-isBalanced (1 2 (3 4 (5 6 nil))) == False" $
+    isBalanced tree1 @?= False
+  , testCase "prob17-isBalanced ((1 2 3) 4 (5 6 nil)) == True" $
+    isBalanced tree2 @?= True
+
+  , testCase "prob17-getHeight (1 2 (3 4 (5 6 nil))) == 4" $
+    getHeight (Just tree1) @?= 4
+  , testCase "prob17-getHeight (nil 4 (6 8 nil)) == 3" $
+    getHeight (Just tree6) @?= 3
+  , testCase "prob17-getHeight (nil) == 0" $
+    getHeight Nothing @?= 0
   ]

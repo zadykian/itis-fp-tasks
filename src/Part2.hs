@@ -216,7 +216,7 @@ getHeight :: Maybe (Tree a) -> Integer
 getHeight Nothing = 0
 getHeight (Just tree) = succ $ max
     (getHeight $ tree & left)
-    (getHeight $ tree & left)
+    (getHeight $ tree & right)
 
 -- Выполнить большее правое (RL) вращение дерева.
 -- 4       4
