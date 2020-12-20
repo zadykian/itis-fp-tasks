@@ -226,6 +226,33 @@ tree11 = Tree
                     5
                     Nothing))))
 
+--         7
+--        /
+--       6
+--      /
+--     3
+--    / \
+--   2   4
+--  /     \
+-- 1       5
+tree12 :: Tree Int
+tree12 = Tree
+    (Just $ Tree
+        (Just $ Tree
+            (Just $ Tree
+                (Just $ Tree Nothing 1 Nothing)
+                2
+                Nothing)
+            3
+            (Just $ Tree
+                Nothing
+                4
+                (Just $ Tree Nothing 5 Nothing)))
+        6
+        Nothing)
+    7
+    Nothing
+
 -- ((1 2 (nil 3 4)) 5 6)
 --     5
 --    / \
@@ -245,6 +272,28 @@ tree13 = Tree
             (Just $ Tree Nothing 4 Nothing)))
     5
     (Just $ Tree Nothing 6 Nothing)
+
+--     3
+--   /   \
+-- 0       5
+--  \     / \
+--   1   4   6
+--    \
+--     2
+tree14 :: Tree Int
+tree14 = Tree
+    (Just $ Tree
+        Nothing
+        0
+        (Just $ Tree
+            Nothing
+            1
+            (Just $ Tree Nothing 2 Nothing)))
+    3
+    (Just $ Tree
+        (Just $ Tree Nothing 4 Nothing)
+        5
+        (Just $ Tree Nothing 6 Nothing))  
 
 -- ((1 2 nil) 3 nil)
 --     3
@@ -428,6 +477,10 @@ test17 = testGroup "P17"
     isBalancedSearchTree (prob17 tree19) @?= True
   , testCase "prob17 (nil 4 (6 8 nil)) == (4 6 8)" $
     prob17 tree6 @?= tree8
+  , testCase "prob17 tree14" $
+    isBalancedSearchTree (prob17 tree14) @?= True
+  , testCase "prob17 tree12" $
+    isBalancedSearchTree (prob17 tree12) @?= True
 
   , testCase "prob17-RL (nil 4 (6 8 nil)) == (4 6 8)" $
     rightLeftRotation tree6 @?= tree8
