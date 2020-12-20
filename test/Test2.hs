@@ -296,7 +296,7 @@ tree17 = Tree
         (Just $ Tree Nothing 2 Nothing)
         3
         (Just $ Tree Nothing 1 Nothing))
-        
+
 -- (nil 0 (nil 1 (nil 2 (nil 3 (nil 4 (nil 5 (nil 6)))))))
 -- 0
 --  \
@@ -335,6 +335,26 @@ tree18 = Tree
                             6
                             Nothing))))))
 
+-- ((nil 1 (2 3 nil)) 4 5)
+--   4
+--  / \
+-- 1   5
+--  \
+--   3
+--  /
+-- 2
+tree19 :: Tree Int
+tree19 = Tree
+    (Just $ Tree
+        Nothing
+        1
+        (Just $ Tree
+            (Just $ Tree Nothing 2 Nothing)
+            3
+            Nothing))
+    4
+    (Just $ Tree  Nothing 5 Nothing)
+
 test11 :: TestTree
 test11 = testGroup "P11"
   [ testCase "prob11 (1 2 (3 4 (5 6 nil))) == 21" $ prob11 tree1 @?= 21
@@ -349,6 +369,7 @@ test12 = testGroup "P12"
   , testCase "prob12 (2 3 1) == F" $ prob12 tree3 @?= False
   , testCase "prob12 (nil 4 (6 8 nil)) == T" $ prob12 tree6 @?= True
   , testCase "prob12 ((nil 4 6) 8 nil) == T" $ prob12 tree7 @?= True
+  , testCase "prob12 tree19 == T" $ prob12 tree19 @?= True
   ]
 
 test13 :: TestTree
@@ -403,6 +424,8 @@ test17 = testGroup "P17"
     isBalancedSearchTree (prob17 tree13) @?= True
   , testCase "prob17 (nil 0 (nil 1 (nil 2 (nil 3 (nil 4 (nil 5 (nil 6)))))))" $
     isBalancedSearchTree (prob17 tree18) @?= True
+  , testCase "prob17 ((nil 1 (2 3 nil)) 4 5)" $
+    isBalancedSearchTree (prob17 tree19) @?= True
 
   , testCase "prob17-RL (nil 4 (6 8 nil)) == (4 6 8)" $
     rightLeftRotation tree6 @?= tree8
@@ -413,6 +436,8 @@ test17 = testGroup "P17"
     isBalanced tree1 @?= False
   , testCase "prob17-isBalanced ((1 2 3) 4 (5 6 nil)) == True" $
     isBalanced tree2 @?= True
+  , testCase "prob17-isBalanced tree19" $
+    isBalanced tree19 @?= False
 
   , testCase "prob17-getHeight (1 2 (3 4 (5 6 nil))) == 4" $
     getHeight (Just tree1) @?= 4
@@ -420,8 +445,10 @@ test17 = testGroup "P17"
     getHeight (Just tree6) @?= 3
   , testCase "prob17-getHeight (nil) == 0" $
     getHeight Nothing @?= 0
+  , testCase "prob17-getHeight tree19 == 4" $
+    getHeight (Just tree19) @?= 4
   ]
 
 -- Является ли дерево сбалансированным деревом поиска.
 isBalancedSearchTree :: Ord a => Tree a -> Bool
-isBalancedSearchTree tree = prob12 tree && isBalanced tree 
+isBalancedSearchTree tree = prob12 tree && isBalanced tree

@@ -195,7 +195,7 @@ prob16 tree = maybe tree rightRotation $ tree & left
 prob17 :: Tree a -> Tree a
 prob17 tree
     | isBalanced tree = tree
-    | otherwise = (handleSubTrees . performRotations . handleSubTrees) tree
+    | otherwise = (performRotations . handleSubTrees) tree
     where
         -- Выполнить рекурсивный вызов балансировки на левом и правом поддеревьях.
         handleSubTrees :: Tree a -> Tree a
