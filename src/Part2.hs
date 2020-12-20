@@ -195,18 +195,22 @@ prob16 tree = maybe tree rightRotation $ tree & left
 prob17 :: Tree a -> Tree a
 prob17 tree
     | isBalanced tree = tree
-    | otherwise =
-        let withHandledSubTrees = tree
-                {
-                    left = do
-                        leftSubTree <- tree & left
-                        return $ prob17 leftSubTree,
-                    right = do
-                        rightSubTree <- tree & right
-                        return $ prob17 rightSubTree
-                }
-        in performRotations withHandledSubTrees
+    | otherwise = (handleSubTrees . performRotations . handleSubTrees) tree
     where
+        -- Выполнить рекурсивный вызов балансировки на левом и правом поддеревьях.
+        handleSubTrees :: Tree a -> Tree a
+        handleSubTrees currentTree = currentTree
+            {
+                left = do
+                    leftSubTree <- currentTree & left
+                    return $ prob17 leftSubTree,
+                right = do
+                    rightSubTree <- currentTree & right
+                    return $ prob17 rightSubTree
+            }
+
+        -- Выполнить вращение дерева относительно текущего корня в зависимости от
+        -- разности высот поддеревьев (LL, LR, RR, RL).
         performRotations :: Tree a -> Tree a
         performRotations currentTree
             | getHeight (currentTree & left) - getHeight (currentTree & right) > 1 =
