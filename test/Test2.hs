@@ -279,6 +279,57 @@ tree14 = Tree
         5
         (Just $ Tree Nothing 6 Nothing))
 
+-- ((1 2 nil) 3 nil)
+--     3
+--    /
+--   2
+--  /
+-- 1
+tree15 :: Tree Int
+tree15 = Tree 
+    (Just $ Tree 
+        (Just $ Tree Nothing 1 Nothing)
+        2
+        Nothing)
+    3
+    Nothing
+
+-- ((x x x) x (x x x))
+--      X
+--    /   \
+--   X     X
+--  / \   / \
+-- X   X X   X
+tree16 :: Tree ()
+tree16 = Tree
+    (Just $ Tree
+        (Just $ Tree Nothing () Nothing)
+        ()
+        (Just $ Tree Nothing () Nothing))
+    ()
+    (Just $ Tree
+        (Just $ Tree Nothing () Nothing)
+        ()
+        (Just $ Tree Nothing () Nothing))
+
+-- ((5 6 4) 7 (2 3 1))
+--      7
+--    /   \
+--   6     3
+--  / \   / \
+-- 5   4 2   1
+tree17 :: Tree Int
+tree17 = Tree
+    (Just $ Tree
+        (Just $ Tree Nothing 5 Nothing)
+        6
+        (Just $ Tree Nothing 4 Nothing))
+    7
+    (Just $ Tree
+        (Just $ Tree Nothing 2 Nothing)
+        3
+        (Just $ Tree Nothing 1 Nothing))
+
 test11 :: TestTree
 test11 = testGroup "P11"
   [ testCase "prob11 (1 2 (3 4 (5 6 nil))) == 21" $ prob11 tree1 @?= 21
@@ -311,6 +362,12 @@ test14 = testGroup "P14"
     prob14 (Tree Nothing () (Just tree4)) @?= Tree Nothing 4 (Just tree3)
   , testCase "prob14 (x x (x x (x x nil))) == (5 6 (3 4 (1 2 nil)))" $
     prob14 tree9 @?= tree10
+  , testCase "prob14 ((x x nil) x nil) == ((1 2 nil) 3 nil)" $
+    prob14 tree5 @?= tree15
+  , testCase "prob14 (nil) == (1)" $
+    prob14 (Tree Nothing () Nothing) @?= Tree Nothing 1 Nothing
+  , testCase "prob14 ((x x nil) x nil) == ((1 2 nil) 3 nil)" $
+    prob14 tree16 @?= tree17
   ]
 
 test15 :: TestTree
