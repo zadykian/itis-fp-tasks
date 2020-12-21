@@ -1,6 +1,6 @@
 module Part3 where
 
-import Data.List (group)
+import Data.List (group, nub, sort)
 
 
 ------------------------------------------------------------
@@ -20,6 +20,7 @@ getPrimeDivisors = getDivisorsWithCurrent 2
             | divisor * divisor > number = [number]
             | number `mod` divisor == 0 = divisor : getDivisorsWithCurrent divisor (number `div` divisor)
             | otherwise = getDivisorsWithCurrent (divisor + 1) number
+
 ------------------------------------------------------------
 -- PROBLEM #19
 --
@@ -39,7 +40,7 @@ prob19 number = map (\divisors -> (head divisors, length divisors)) groupEqualDi
 -- Совершенное число равно сумме своих делителей (меньших
 -- самого числа)
 prob20 :: Integer -> Bool
-prob20 = error "Implement me!"
+prob20 number = sum (getUnorderedDivisors number) == number
 
 ------------------------------------------------------------
 -- PROBLEM #21
@@ -47,7 +48,14 @@ prob20 = error "Implement me!"
 -- Вернуть список всех делителей числа N (1<=N<=10^10) в
 -- порядке возрастания
 prob21 :: Integer -> [Integer]
-prob21 = error "Implement me!"
+prob21 number = (sort . getUnorderedDivisors) number ++ [number]
+
+-- Получить все делители числа, кроме самого числа.
+getUnorderedDivisors :: Integral a => a -> [a]
+getUnorderedDivisors number = (leftPart++) $ nub $ concat [ [x, div number x] | x <- [2..limit], number `rem` x == 0 ]
+    where
+        limit = (floor . sqrt . fromIntegral) number
+        leftPart = if number == 1 then [] else [1]
 
 ------------------------------------------------------------
 -- PROBLEM #22
