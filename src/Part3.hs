@@ -6,10 +6,11 @@ module Part3 where
 -- Проверить, является ли число N простым (1 <= N <= 10^9)
 prob18 :: Integer -> Bool
 prob18 n = getPrimeDivisors n == [n]
-    where
-        getPrimeDivisors :: Integer -> [Integer]
-        getPrimeDivisors = getDivisorsWithCurrent 2
 
+-- Получить все простые делители числа.
+getPrimeDivisors :: Integer -> [Integer]
+getPrimeDivisors = getDivisorsWithCurrent 2
+    where
         getDivisorsWithCurrent :: Integer -> Integer -> [Integer]
         getDivisorsWithCurrent _ 1 = []
         getDivisorsWithCurrent divisor number
