@@ -136,6 +136,12 @@ test27 = testGroup "P27"
     prob27 4 [2,1,2] @?= Just (2,2)
   , testCase "prob27 4 [1,2,1] == N" $
     prob27 4 [1,2,1] @?= Nothing
+  , testCase "prob27 501 (take 500 [1..]) == (1, 500)" $
+    prob27 501 (take 500 [1..]) @?= Just (1, 500)
+  , testCase "prob27 1999 (take 1000 [1..]) == (999, 1000)" $
+    prob27 1999 (take 1000 [1..]) @?= Just (999, 1000)
+  , testCase "prob27 1999 (take 1000 [1..]) == (999, 1000)" $
+    prob27 1999 (take 1000 [1..]) @?= Just (999, 1000)
   ]
 
 test28 :: TestTree

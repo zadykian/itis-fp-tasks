@@ -147,7 +147,15 @@ prob26 left right = sumDivisors left == right && sumDivisors right == left
 -- Найти в списке два числа, сумма которых равна заданному.
 -- Длина списка не превосходит 500
 prob27 :: Int -> [Int] -> Maybe (Int, Int)
-prob27 = error "Implement me!"
+prob27 _ [] = Nothing
+prob27 requiredSum (curHead : curTail) = withFixedCurrent curHead curTail
+    where
+        withFixedCurrent :: Int -> [Int] -> Maybe (Int, Int)
+        withFixedCurrent _ [] = prob27 requiredSum curTail
+        withFixedCurrent current (innerHead : innerTail) =
+            if current + innerHead == requiredSum
+            then Just (current, innerHead)
+            else withFixedCurrent current innerTail
 
 ------------------------------------------------------------
 -- PROBLEM #28
