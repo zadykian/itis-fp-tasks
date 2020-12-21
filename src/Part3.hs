@@ -138,7 +138,8 @@ prob25 number = getDigits number == (reverse . getDigits) number
 -- сумма делителей одного (без учёта самого числа) равна
 -- другому, и наоборот
 prob26 :: Integer -> Integer -> Bool
-prob26 = error "Implement me!"
+prob26 left right = sumDivisors left == right && sumDivisors right == left 
+    where sumDivisors = sum . getUnorderedDivisors
 
 ------------------------------------------------------------
 -- PROBLEM #27
