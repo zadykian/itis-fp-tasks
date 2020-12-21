@@ -63,7 +63,10 @@ getUnorderedDivisors number = (leftPart++) $ nub $ concat [ [x, div number x] | 
 -- Подсчитать произведение количеств букв i в словах из
 -- заданной строки (списка символов)
 prob22 :: String -> Integer
-prob22 = error "Implement me!"
+prob22 input = product $ (map lettersCount) (words input)
+    where
+        lettersCount :: String -> Integer
+        lettersCount word = max 1 $ toInteger $ length (filter (=='i') word)
 
 ------------------------------------------------------------
 -- PROBLEM #23

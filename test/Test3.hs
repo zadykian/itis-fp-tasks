@@ -75,6 +75,14 @@ test22 = testGroup "P22"
     prob22 "I have no letters" @?= 1
   , testCase "prob22 \"no letters\" == 1 " $
     prob22 "no letters" @?= 1
+  , testCase "prob22 \"\" == 1 " $
+    prob22 "" @?= 1
+  , testCase "prob22 \"i\" == 1 " $
+    prob22 "i" @?= 1
+  , testCase "prob22 \"iii\" == 3 " $
+    prob22 "iii" @?= 3
+  , testCase "prob22 \"iii iii\" == 9 " $
+    prob22 "iii iii" @?= 9
   ]
 
 test23 :: TestTree
