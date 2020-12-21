@@ -22,9 +22,12 @@ main = defaultMain tests
 tests :: TestTree
 tests = localOption (mkTimeout 1000000) $
   testGroup "Parts"
-  [ part1
-  , part2
-  , part3
+  [ 
+  -- todo: uncomment
+  --part1
+  --, part2
+  --, 
+    part3
   --, part4
   ]
 
