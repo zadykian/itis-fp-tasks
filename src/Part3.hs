@@ -101,6 +101,7 @@ data ParseResult = ParseResult
         rightBound :: Int,
         stringToSlice :: String
     }
+
 ------------------------------------------------------------
 -- PROBLEM #24
 --
@@ -179,7 +180,7 @@ prob28 requiredSum inputList = do
         subsequencesBySize [] = [[[]]]
         subsequencesBySize (curHead : curTail) =
             let next = subsequencesBySize curTail
-            in zipWith (++) ([]:next) (map (map (curHead:)) next ++ [[]])
+            in zipWith (++) ([] : next) (map (map (curHead :)) next ++ [[]])
 
 ------------------------------------------------------------
 -- PROBLEM #29
@@ -201,7 +202,15 @@ prob29 kLength = head [(x * y) |
 -- Найти наименьшее треугольное число, у которого не меньше
 -- заданного количества делителей
 prob30 :: Int -> Integer
-prob30 = error "Implement me!"
+prob30 reqCount = head $ 
+    filter (\triangular -> (succ . length . getUnorderedDivisors) triangular >= reqCount) 
+    generateTriangular
+    where
+        generateTriangular :: [Integer]
+        generateTriangular = triangularWithCurrent 0 1
+            where
+                triangularWithCurrent :: Integer -> Integer -> [Integer]
+                triangularWithCurrent current next = current : triangularWithCurrent (current + next) (succ next)
 
 ------------------------------------------------------------
 -- PROBLEM #31
