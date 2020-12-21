@@ -158,7 +158,10 @@ test28 = testGroup "P28"
 
 test29 :: TestTree
 test29 = testGroup "P29"
-  [ testCase "prob29 1 == 9" $ prob29 1 @?= 9
+  [ testCase "prob29 1 == 9"        $ prob29 1 @?= 9
+  , testCase "prob29 2 == 9009"     $ prob29 2 @?= 9009
+  , testCase "prob29 3 == 90909"    $ prob29 3 @?= 90909
+  , testCase "prob29 4 == 99000099" $ prob29 4 @?= 99000099
   ]
 
 test30 :: TestTree
