@@ -103,6 +103,11 @@ test24 = testGroup "P24"
   , testCase "prob24 2 == F" $ prob24 2 @?= False
   , testCase "prob24 6 == T" $ prob24 6 @?= True
   , testCase "prob24 15 == T" $ prob24 15 @?= True
+  , testCase "prob24 666 == T" $ prob24 666 @?= True
+  , testCase "prob24 1830 == T" $ prob24 1830 @?= True
+  , testCase "prob24 500500 == T" $ prob24 500500 @?= True
+  , testCase "prob24 200010000 == T" $ prob24 200010000 @?= True
+  , testCase "prob24 50000 * 50001 `div` 2 == T" $ prob24 (50000 * 50001 `div` 2) @?= True
   ]
 
 test25 :: TestTree

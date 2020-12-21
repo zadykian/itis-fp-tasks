@@ -108,7 +108,13 @@ data ParseResult = ParseResult
 -- представить как сумму чисел от 1 до какого-то K
 -- (1 <= N <= 10^10)
 prob24 :: Integer -> Bool
-prob24 = error "Implement me!"
+prob24 number = iterateTriangular 1 0
+    where 
+        iterateTriangular :: Integer -> Integer -> Bool
+        iterateTriangular currentNum currentSum
+            | currentSum == number = True
+            | currentSum > number = False
+            | otherwise = iterateTriangular (succ currentNum) (currentSum + currentNum)
 
 ------------------------------------------------------------
 -- PROBLEM #25
