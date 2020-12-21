@@ -24,7 +24,7 @@ tests = localOption (mkTimeout 1000000) $
   testGroup "Parts"
   [ part1
   , part2
-  --, part3
+  , part3
   --, part4
   ]
 
