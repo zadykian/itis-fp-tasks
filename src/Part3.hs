@@ -1,6 +1,7 @@
 module Part3 where
 
 import Data.List (group, nub, sort, find)
+import Data.Bool (bool)
 
 
 ------------------------------------------------------------
@@ -52,7 +53,9 @@ prob21 number = (sort . getUnorderedDivisors) number ++ [number]
 
 -- Получить все делители числа, кроме самого числа.
 getUnorderedDivisors :: Integral a => a -> [a]
-getUnorderedDivisors number = (leftPart++) $ nub $ concat [ [x, div number x] | x <- [2..limit], number `rem` x == 0 ]
+getUnorderedDivisors number = (leftPart++)
+    $ nub
+    $ concat [ [x, number `div` x] | x <- [2..limit], number `rem` x == 0 ]
     where
         limit = (floor . sqrt . fromIntegral) number
         leftPart = if number == 1 then [] else [1]
@@ -169,7 +172,7 @@ prob28 requiredSum inputList = do
     list <- find
             (\list -> sum list == requiredSum)
             $ subsets 4 inputList
-    return (list !! 0, list !! 1, list !! 2, list !! 3)
+    return (list !! 3, list !! 2, list !! 1, list !! 0)
     where
         subsets :: Int -> [a] -> [[a]]
         subsets subLength listToHandle =
@@ -219,13 +222,15 @@ prob30 reqCount = head $
 -- меньших заданного N (1 <= N <= 10000)
 prob31 :: Int -> Int
 prob31 maxValue = sum $ map (\(left, right) -> left + right) amicablePairs
-    where
-        range = [1 .. pred maxValue]
-        withDivisorSums = zip range $ map (sum . getUnorderedDivisors) range
-        amicablePairs = [(left, right) |
-            (left, leftDivisors) <- withDivisorSums,
-            (right, rightDivisors) <- withDivisorSums,
-            left < right && leftDivisors == right && rightDivisors == left]
+    where 
+        amicablePairs = concat $ map getAmicableItem [1 .. pred maxValue]
+        getAmicableItem currentItem = 
+            let amicableItem = divisorsSum currentItem
+            in bool
+               [] 
+               [(currentItem, amicableItem)] 
+               (currentItem < amicableItem && currentItem == divisorsSum amicableItem && amicableItem < maxValue)
+        divisorsSum = sum . getUnorderedDivisors
 
 ------------------------------------------------------------
 -- PROBLEM #32
@@ -235,4 +240,9 @@ prob31 maxValue = sum $ map (\(left, right) -> left + right) amicablePairs
 -- указанного достоинства
 -- Сумма не превосходит 100
 prob32 :: [Int] -> Int -> [[Int]]
-prob32 = error "Implement me!"
+prob32 coins moneySum
+    | moneySum < minimum coins = []
+    | otherwise = [coin : nextCoins |
+        coin <- reverse coins,
+        nextCoins <- [] : prob32 (filter (<= coin) coins) (moneySum - coin),
+        sum (coin : nextCoins) == moneySum]

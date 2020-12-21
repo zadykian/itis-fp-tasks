@@ -124,6 +124,9 @@ test26 = testGroup "P26"
   [ testCase "prob26 1 2 == F" $ prob26 1 2 @?= False
   , testCase "prob26 6 6 == T" $ prob26 6 6 @?= True
   , testCase "prob26 220 284 == T" $ prob26 220 284 @?= True
+  , testCase "prob26 1184 1210 == T" $ prob26 1184 1210 @?= True
+  , testCase "prob26 2620 2924 == T" $ prob26 2620 2924 @?= True
+  , testCase "prob26 10774 10856 == T" $ prob26 10774 10856 @?= True
   ]
 
 test27 :: TestTree
@@ -150,10 +153,10 @@ test28 = testGroup "P28"
     prob28 5 [3,1,1,1,2] @?= Just (2,1,1,1)
   , testCase "prob28 5 [3,2,1,1,5] == N" $
     prob28 5 [3,2,1,1,5] @?= Nothing
-  , testCase "prob28 1994 (take 500 [1..]) == (497, 498, 499, 500)" $
-    prob28 1994 (take 500 [1..]) @?= Just (497, 498, 499, 500)
-  , testCase "prob28 3994 (take 1000 [1..]) == (997, 998, 999, 1000)" $
-    prob28 3994 (take 1000 [1..]) @?= Just (997, 998, 999, 1000)
+  , testCase "prob28 1994 (take 500 [1..]) == (500, 499, 498, 497)" $
+    prob28 1994 (take 500 [1..]) @?= Just (500, 499, 498, 497)
+  , testCase "prob28 3994 (take 1000 [1..]) == (1000, 999, 998, 997)" $
+    prob28 3994 (take 1000 [1..]) @?= Just (1000, 999, 998, 997)
   ]
 
 test29 :: TestTree
@@ -166,19 +169,20 @@ test29 = testGroup "P29"
 
 test30 :: TestTree
 test30 = testGroup "P30"
-  [ testCase "prob30 4 == 6" $ prob30 4 @?= 6
+  [ testCase "prob30 4 == 6"  $ prob30 4 @?= 6
   , testCase "prob30 5 == 28" $ prob30 5 @?= 28
   ]
 
 test31 :: TestTree
 test31 = testGroup "P31"
-  [ testCase "prob31 250 == 0" $ prob31 250 @?= 0
-  , testCase "prob31 300 == 504" $ prob31 300 @?= 504
-  , testCase "prob31 10000 == 504" $ prob31 10000 @?= 31626
+  [ testCase "prob31 250 == 0"        $ prob31 250   @?= 0
+  , testCase "prob31 300 == 504"      $ prob31 300   @?= 504
+  , testCase "prob31 10000 == 31626"  $ prob31 10000 @?= 31626
+  , testCase "prob31 20000 == 115848" $ prob31 20000 @?= 115848
   ]
 
 test32 :: TestTree
 test32 = testGroup "P32"
   [ testCase "prob32 [2,3,5] 10 == [5+5, 5+3+2, 3+3+2+2, 2+2+2+2+2]" $
     prob32 [2,3,5] 10 @?= [[5,5],[5,3,2],[3,3,2,2],[2,2,2,2,2]]
-  ]
+   ]
