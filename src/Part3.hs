@@ -77,8 +77,20 @@ prob22 input = product $ (map lettersCount) (words input)
 -- M > 0 и N > 0. Если M > N, то вернуть символы из W в
 -- обратном порядке. Нумерация символов с единицы.
 prob23 :: String -> Maybe String
-prob23 = error "Implement me!"
+prob23 input = return input >>= parseInput >>= getSlice
+    where
+        parseInput :: String -> Maybe ParseResult
+        parseInput = undefined
 
+        getSlice :: ParseResult -> Maybe String
+        getSlice = undefined
+
+data ParseResult = ParseResult 
+    { 
+        leftBound :: Int,
+        rightBound :: Int,
+        stringToSlice :: String 
+    }
 ------------------------------------------------------------
 -- PROBLEM #24
 --
