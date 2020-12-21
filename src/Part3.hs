@@ -1,5 +1,8 @@
 module Part3 where
 
+import Data.List (group)
+
+
 ------------------------------------------------------------
 -- PROBLEM #18
 --
@@ -24,7 +27,10 @@ getPrimeDivisors = getDivisorsWithCurrent 2
 -- разложении числа N (1 <= N <= 10^9). Простые делители
 -- должны быть расположены по возрастанию
 prob19 :: Integer -> [(Integer, Int)]
-prob19 = error "Implement me!"
+prob19 number = map (\divisors -> (head divisors, length divisors)) groupEqualDivisors
+    where
+        groupEqualDivisors :: [[Integer]]
+        groupEqualDivisors = group (getPrimeDivisors number)
 
 ------------------------------------------------------------
 -- PROBLEM #20
