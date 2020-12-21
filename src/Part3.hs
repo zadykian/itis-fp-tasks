@@ -77,13 +77,23 @@ prob22 input = product $ (map lettersCount) (words input)
 -- M > 0 и N > 0. Если M > N, то вернуть символы из W в
 -- обратном порядке. Нумерация символов с единицы.
 prob23 :: String -> Maybe String
-prob23 input = return input >>= parseInput >>= getSlice
+prob23 inputString = return inputString >>= parseInput >>= getSlice
     where
         parseInput :: String -> Maybe ParseResult
-        parseInput = undefined
+        parseInput input = do
+            let left = read $ takeWhile (/= '-') input
+            let right = read $ takeWhile (/= ':') $ tail $ dropWhile (/= '-') input
+            let string = tail $ dropWhile (/= ' ') input
+            return ParseResult { leftBound = left, rightBound = right, stringToSlice = string }
 
         getSlice :: ParseResult -> Maybe String
-        getSlice = undefined
+        getSlice (ParseResult left right string)
+            | left > length string || right > length string = undefined
+            | right >= left = Just $ leftToRightSlice left right
+            | otherwise = Just $ reverse $ leftToRightSlice right left
+            where
+                leftToRightSlice :: Int -> Int -> String 
+                leftToRightSlice l r = take r $ drop (l - 1) string
 
 data ParseResult = ParseResult 
     { 
