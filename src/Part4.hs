@@ -21,6 +21,7 @@ import Control.Applicative
 -- (удовлетворяющий законам)
 instance Functor Parser where
     fmap = error "Implement me!"
+
 ------------------------------------------------------------
 -- PROBLEM #34
 --
@@ -29,6 +30,7 @@ instance Functor Parser where
 instance Applicative Parser where
     pure = error "Implement me!"
     (<*>) = error "Implement me!"
+
 ------------------------------------------------------------
 -- PROBLEM #35
 --
@@ -37,6 +39,7 @@ instance Applicative Parser where
 instance Alternative Parser where
     empty = error "Implement me!"
     (<|>) = error "Implement me!"
+
 ------------------------------------------------------------
 -- PROBLEM #36
 --
@@ -44,11 +47,13 @@ instance Alternative Parser where
 -- (удовлетворяющий законам)
 instance Monad Parser where
     (>>=) = error "Implement me!"
+
 ------------------------------------------------------------
 -- PROBLEM #37
 --
 -- Написать экземпляр класса Functor для Foo
 -- (удовлетворяющий законам)
+
 instance Functor (Foo r) where
     fmap = error "Implement me!"
 ------------------------------------------------------------
@@ -59,6 +64,7 @@ instance Functor (Foo r) where
 instance Applicative (Foo r) where
     pure = error "Implement me!"
     (<*>) = error "Implement me!"
+
 ------------------------------------------------------------
 -- PROBLEM #39
 --
@@ -66,6 +72,7 @@ instance Applicative (Foo r) where
 -- (удовлетворяющий законам)
 instance Monad (Foo r) where
     (>>=) = error "Implement me!"
+
 ------------------------------------------------------------
 -- PROBLEM #40
 --

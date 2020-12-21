@@ -1,6 +1,6 @@
 module Part3 where
 
-import Data.List (group, nub, sort)
+import Data.List (group, nub, sort, find)
 
 
 ------------------------------------------------------------
@@ -138,7 +138,7 @@ prob25 number = getDigits number == (reverse . getDigits) number
 -- сумма делителей одного (без учёта самого числа) равна
 -- другому, и наоборот
 prob26 :: Integer -> Integer -> Bool
-prob26 left right = sumDivisors left == right && sumDivisors right == left 
+prob26 left right = sumDivisors left == right && sumDivisors right == left
     where sumDivisors = sum . getUnorderedDivisors
 
 ------------------------------------------------------------
@@ -164,7 +164,22 @@ prob27 requiredSum (curHead : curTail) = withFixedCurrent curHead curTail
 -- заданному.
 -- Длина списка не превосходит 500
 prob28 :: Int -> [Int] -> Maybe (Int, Int, Int, Int)
-prob28 = error "Implement me!"
+prob28 requiredSum inputList = do
+    list <- find
+            (\list -> sum list == requiredSum)
+            $ subsets 4 inputList
+    return (list !! 0, list !! 1, list !! 2, list !! 3)
+    where
+        subsets :: Int -> [a] -> [[a]]
+        subsets subLength listToHandle =
+            if subLength > length listToHandle
+            then []
+            else subsequencesBySize listToHandle !! (length listToHandle - subLength)
+
+        subsequencesBySize [] = [[[]]]
+        subsequencesBySize (curHead : curTail) =
+            let next = subsequencesBySize curTail
+            in zipWith (++) ([]:next) (map (map (curHead:)) next ++ [[]])
 
 ------------------------------------------------------------
 -- PROBLEM #29
@@ -172,7 +187,7 @@ prob28 = error "Implement me!"
 -- Найти наибольшее число-палиндром, которое является
 -- произведением двух K-значных (1 <= K <= 3)
 prob29 :: Int -> Int
-prob29 k = error "Implement me!"
+prob29 = error "Implement me!"
 
 ------------------------------------------------------------
 -- PROBLEM #30
