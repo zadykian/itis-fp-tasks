@@ -188,7 +188,7 @@ prob28 requiredSum inputList = do
 -- Найти наибольшее число-палиндром, которое является
 -- произведением двух K-значных (1 <= K <= 3)
 prob29 :: Int -> Int
-prob29 kLength = head [(x * y) | 
+prob29 kLength = head [(x * y) |
     x <- [maxByLength, (pred maxByLength) ..],
     y <- [maxByLength, (pred maxByLength) ..],
     (prob25 . toInteger) (x * y)]
@@ -202,8 +202,8 @@ prob29 kLength = head [(x * y) |
 -- Найти наименьшее треугольное число, у которого не меньше
 -- заданного количества делителей
 prob30 :: Int -> Integer
-prob30 reqCount = head $ 
-    filter (\triangular -> (succ . length . getUnorderedDivisors) triangular >= reqCount) 
+prob30 reqCount = head $
+    filter (\triangular -> (succ . length . getUnorderedDivisors) triangular >= reqCount)
     generateTriangular
     where
         generateTriangular :: [Integer]
@@ -218,7 +218,14 @@ prob30 reqCount = head $
 -- Найти сумму всех пар различных дружественных чисел,
 -- меньших заданного N (1 <= N <= 10000)
 prob31 :: Int -> Int
-prob31 = error "Implement me!"
+prob31 maxValue = sum $ map (\(left, right) -> left + right) amicablePairs
+    where
+        range = [1 .. pred maxValue]
+        withDivisorSums = zip range $ map (sum . getUnorderedDivisors) range
+        amicablePairs = [(left, right) |
+            (left, leftDivisors) <- withDivisorSums,
+            (right, rightDivisors) <- withDivisorSums,
+            left < right && leftDivisors == right && rightDivisors == left]
 
 ------------------------------------------------------------
 -- PROBLEM #32

@@ -174,6 +174,7 @@ test31 :: TestTree
 test31 = testGroup "P31"
   [ testCase "prob31 250 == 0" $ prob31 250 @?= 0
   , testCase "prob31 300 == 504" $ prob31 300 @?= 504
+  , testCase "prob31 10000 == 504" $ prob31 10000 @?= 31626
   ]
 
 test32 :: TestTree
