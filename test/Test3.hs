@@ -113,8 +113,10 @@ test24 = testGroup "P24"
 test25 :: TestTree
 test25 = testGroup "P25"
   [ testCase "prob25 9 == T" $ prob25 9 @?= True
+  , testCase "prob25 0 T" $ prob25 0 @?= True
   , testCase "prob25 10 == F" $ prob25 10 @?= False
   , testCase "prob25 101 == T" $ prob25 101 @?= True
+  , testCase "prob25 101..101 == T" $ prob25 10101010101010101010101010101010101010101010101 @?= True
   ]
 
 test26 :: TestTree

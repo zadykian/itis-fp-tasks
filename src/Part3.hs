@@ -92,14 +92,14 @@ prob23 inputString = return inputString >>= parseInput >>= getSlice
             | right >= left = Just $ leftToRightSlice left right
             | otherwise = Just $ reverse $ leftToRightSlice right left
             where
-                leftToRightSlice :: Int -> Int -> String 
+                leftToRightSlice :: Int -> Int -> String
                 leftToRightSlice l r = take r $ drop (l - 1) string
 
-data ParseResult = ParseResult 
-    { 
+data ParseResult = ParseResult
+    {
         leftBound :: Int,
         rightBound :: Int,
-        stringToSlice :: String 
+        stringToSlice :: String
     }
 ------------------------------------------------------------
 -- PROBLEM #24
@@ -109,7 +109,7 @@ data ParseResult = ParseResult
 -- (1 <= N <= 10^10)
 prob24 :: Integer -> Bool
 prob24 number = iterateTriangular 1 0
-    where 
+    where
         iterateTriangular :: Integer -> Integer -> Bool
         iterateTriangular currentNum currentSum
             | currentSum == number = True
@@ -122,7 +122,14 @@ prob24 number = iterateTriangular 1 0
 -- Проверить, что запись числа является палиндромом (т.е.
 -- читается одинаково слева направо и справа налево)
 prob25 :: Integer -> Bool
-prob25 = error "Implement me!"
+prob25 number = getDigits number == (reverse . getDigits) number
+    where
+        getDigits :: Integer -> [Integer]
+        getDigits 0 = [0]
+        getDigits current = digitsInternal current
+            where
+                digitsInternal 0 = []
+                digitsInternal x = x `mod` 10 : digitsInternal (x `div` 10)
 
 ------------------------------------------------------------
 -- PROBLEM #26
