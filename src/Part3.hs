@@ -88,7 +88,7 @@ prob23 inputString = return inputString >>= parseInput >>= getSlice
 
         getSlice :: ParseResult -> Maybe String
         getSlice (ParseResult left right string)
-            | left > length string || right > length string = undefined
+            | left > length string || right > length string = Nothing
             | right >= left = Just $ leftToRightSlice left right
             | otherwise = Just $ reverse $ leftToRightSlice right left
             where
