@@ -38,8 +38,12 @@ test33 = testGroup "P33" $ let
 
 test34 :: TestTree
 test34 = testGroup "P34"
-  [ testCase "<*>" $
+  [ testCase "<*> (,)" $
     parse ((,) <$> digitP <*> digitP) "12" @?= Right ('1','2')
+  , testCase "<*> (,,)" $
+    parse ((,,) <$> digitP <*> digitP <*> digitP) "123" @?= Right ('1','2','3')
+  , testCase "<*> (,,) failure" $
+    parse ((,,) <$> digitP <*> digitP <*> digitP) "12A" @?= Left "Can't parse"
   , testCase "pure" $
     parse (pure 123) "12" @?= Left "Leftover: 12"
   ]

@@ -35,7 +35,12 @@ instance Applicative Parser where
     pure value = Parser $ \str -> [(str, value)]
 
     (<*>) :: Parser (a -> b) -> Parser a -> Parser b
-    (<*>) = error "Implement me!"
+    (Parser leftFunc) <*> (Parser rightFunc) = Parser parserFunc
+        where
+            parserFunc input = do
+                (leftString, funcToApply) <- (leftFunc input)
+                (rightString, item) <- (rightFunc leftString)
+                return (rightString, funcToApply item)
 
 ------------------------------------------------------------
 -- PROBLEM #35
