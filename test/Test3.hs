@@ -83,6 +83,10 @@ test22 = testGroup "P22"
     prob22 "iii" @?= 3
   , testCase "prob22 \"iii iii\" == 9 " $
     prob22 "iii iii" @?= 9
+  , testCase "prob22 \"iii\n\tiii\n\ti0i\" == 18 " $
+    prob22 "iii\n\tiii\n\ti0i" @?= 18
+  , testCase "prob22 \"\0105\0105 \0105\0105i\" == 6 " $
+    prob22 "\0105\0105 \0105\0105i" @?= 6
   ]
 
 test23 :: TestTree
@@ -116,7 +120,8 @@ test25 = testGroup "P25"
   , testCase "prob25 0 T" $ prob25 0 @?= True
   , testCase "prob25 10 == F" $ prob25 10 @?= False
   , testCase "prob25 101 == T" $ prob25 101 @?= True
-  , testCase "prob25 101..101 == T" $ prob25 10101010101010101010101010101010101010101010101 @?= True
+  , testCase "prob25 101..101 == T" $ prob25 1010101010101 @?= True
+  , testCase "prob25 906609 == T" $ prob25 906609 @?= True
   ]
 
 test26 :: TestTree
@@ -165,8 +170,7 @@ test29 :: TestTree
 test29 = testGroup "P29"
   [ testCase "prob29 1 == 9"        $ prob29 1 @?= 9
   , testCase "prob29 2 == 9009"     $ prob29 2 @?= 9009
-  , testCase "prob29 3 == 90909"    $ prob29 3 @?= 90909
-  , testCase "prob29 4 == 99000099" $ prob29 4 @?= 99000099
+  , testCase "prob29 3 == 906609"   $ prob29 3 @?= 906609
   ]
 
 test30 :: TestTree

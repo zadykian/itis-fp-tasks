@@ -191,12 +191,12 @@ prob28 requiredSum inputList = do
 -- Найти наибольшее число-палиндром, которое является
 -- произведением двух K-значных (1 <= K <= 3)
 prob29 :: Int -> Int
-prob29 kLength = head [(x * y) |
-    x <- [maxByLength, (pred maxByLength) ..],
-    y <- [maxByLength, (pred maxByLength) ..],
+prob29 kLength = maximum [(x * y) |
+    x <- [minByLength .. maxByLength],
+    y <- [minByLength .. maxByLength],
     (prob25 . toInteger) (x * y)]
     where
-        maxByLength :: Int
+        minByLength = 10 ^ (kLength - 1)
         maxByLength = 10 ^ kLength - 1
 
 ------------------------------------------------------------
