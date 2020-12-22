@@ -69,14 +69,14 @@ test21 = testGroup "P21"
 
 test22 :: TestTree
 test22 = testGroup "P22"
-  [ testCase "prob22 \"part iii izi\" == 6" $
-    prob22 "part iii izi" @?= 6
-  , testCase "prob22 \"I have no letters\" == 1" $
-    prob22 "I have no letters" @?= 1
-  , testCase "prob22 \"no letters\" == 1 " $
-    prob22 "no letters" @?= 1
-  , testCase "prob22 \"\" == 1 " $
-    prob22 "" @?= 1
+  [ testCase "prob22 \"parti iii izi\" == 6" $
+    prob22 "parti iii izi" @?= 6
+  , testCase "prob22 \"I have no letters\" == 0" $
+    prob22 "I have no letters" @?= 0
+  , testCase "prob22 \"no letters\" == 0 " $
+    prob22 "no letters" @?= 0
+  , testCase "prob22 \"\" == 0 " $
+    prob22 "" @?= 0
   , testCase "prob22 \"i\" == 1 " $
     prob22 "i" @?= 1
   , testCase "prob22 \"iii\" == 3 " $

@@ -66,10 +66,11 @@ getUnorderedDivisors number = (leftPart++)
 -- Подсчитать произведение количеств букв i в словах из
 -- заданной строки (списка символов)
 prob22 :: String -> Integer
+prob22 []    = 0
 prob22 input = product $ (map lettersCount) (words input)
     where
         lettersCount :: String -> Integer
-        lettersCount word = max 1 $ toInteger $ length (filter (=='i') word)
+        lettersCount word = toInteger $ length (filter (=='i') word)
 
 ------------------------------------------------------------
 -- PROBLEM #23
