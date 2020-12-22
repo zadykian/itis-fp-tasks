@@ -15,6 +15,7 @@ module Part4 where
 import Part4.Types
 
 import Control.Applicative
+import Control.Monad (msum)
 
 ------------------------------------------------------------
 -- PROBLEM #33
@@ -48,8 +49,12 @@ instance Applicative Parser where
 -- Написать экземпляр класса Alternative для Parser
 -- (удовлетворяющий законам)
 instance Alternative Parser where
-    empty = error "Implement me!"
-    (<|>) = error "Implement me!"
+    
+    empty :: Parser a
+    empty = Parser $ \_ -> []
+
+    (<|>) :: Parser a -> Parser a -> Parser a
+    (Parser left) <|> (Parser right) = Parser $ \str -> msum $ map ($ str) [left, right]
 
 ------------------------------------------------------------
 -- PROBLEM #36
