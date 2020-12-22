@@ -431,6 +431,67 @@ tree22 = Tree
     7
     Nothing
 
+-- -1
+--  \
+--   0
+--    \
+--     3
+--    / \
+--   2   4
+--  /     \
+-- 1       5
+tree23 :: Tree Int
+tree23 = Tree
+    Nothing
+     (-1)
+     (Just $ Tree
+        Nothing
+        0
+        (Just tree20))
+
+
+-- 1
+--  \
+--   2
+--    \
+--     3
+--      \
+--       4
+--        \
+--         5
+--          \
+--           6
+--            \
+--             7
+--              \
+--               8
+tree24:: Tree Int
+tree24 = Tree
+    Nothing
+    1
+    (Just $ Tree
+        Nothing
+        2
+        (Just $ Tree
+            Nothing
+            3
+            (Just $ Tree
+                Nothing
+                4
+                (Just $ Tree
+                    Nothing
+                    5
+                    (Just $ Tree
+                        Nothing
+                        6
+                        (Just $ Tree
+                            Nothing
+                            7
+                            (Just $ Tree
+                                Nothing
+                                8
+                                Nothing)))))))
+
 test11 :: TestTree
 test11 = testGroup "P11"
   [ testCase "prob11 (1 2 (3 4 (5 6 nil))) == 21" $ prob11 tree1 @?= 21
@@ -446,6 +507,8 @@ test12 = testGroup "P12"
   , testCase "prob12 (nil 4 (6 8 nil)) == T" $ prob12 tree6 @?= True
   , testCase "prob12 ((nil 4 6) 8 nil) == T" $ prob12 tree7 @?= True
   , testCase "prob12 tree19 == T" $ prob12 tree19 @?= True
+  , testCase "prob12 tree23 == T" $ prob12 tree23 @?= True
+  , testCase "prob12 tree24 == T" $ prob12 tree24 @?= True
   ]
 
 test13 :: TestTree
@@ -506,12 +569,14 @@ test17 = testGroup "P17"
     prob17 tree6 @?= tree8
   , testCase "prob17 tree14" $
     isBalancedSearchTree (prob17 tree14) @?= True
-
   , testCase "prob17 tree12" $
     isBalancedSearchTree (prob17 tree12) @?= True
-
   , testCase "prob17 tree22" $
     isBalancedSearchTree (prob17 tree22) @?= True
+  , testCase "prob17 tree23" $
+    isBalancedSearchTree (prob17 tree23) @?= True
+  , testCase "prob17 tree24" $
+    isBalancedSearchTree (prob17 tree24) @?= True
 
   , testCase "prob17-RL (nil 4 (6 8 nil)) == (4 6 8)" $
     rightLeftRotation tree6 @?= tree8
@@ -524,6 +589,8 @@ test17 = testGroup "P17"
     isBalanced tree2 @?= True
   , testCase "prob17-isBalanced tree19" $
     isBalanced tree19 @?= False
+  , testCase "prob17-isBalanced tree23" $
+    isBalanced tree24 @?= False
 
   , testCase "prob17-getHeight (1 2 (3 4 (5 6 nil))) == 4" $
     getHeight (Just tree1) @?= 4
@@ -533,6 +600,8 @@ test17 = testGroup "P17"
     getHeight Nothing @?= 0
   , testCase "prob17-getHeight tree19 == 4" $
     getHeight (Just tree19) @?= 4
+  , testCase "prob17-getHeight tree23 == 8" $
+    getHeight (Just tree24) @?= 8
   ]
 
 -- Является ли дерево сбалансированным деревом поиска.
