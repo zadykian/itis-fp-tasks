@@ -31,7 +31,10 @@ instance Functor Parser where
 -- Написать экземпляр класса Applicative для Parser
 -- (удовлетворяющий законам)
 instance Applicative Parser where
-    pure = error "Implement me!"
+    pure :: a -> Parser a
+    pure value = Parser $ \str -> [(str, value)]
+
+    (<*>) :: Parser (a -> b) -> Parser a -> Parser b
     (<*>) = error "Implement me!"
 
 ------------------------------------------------------------
