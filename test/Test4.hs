@@ -30,6 +30,10 @@ test33 = testGroup "P33" $ let
        parse (id <$> digitP) "1" @?= Right '1'
      , testCase "fmap f . fmap g" $
        parse (toDigit <$> digitP) "1" @?= Right 1
+     , testCase "fmap id can't parse" $
+       parse (id <$> digitP) "not-a-char" @?= Left "Can't parse"
+     , testCase "fmap id fail" $
+       parse (id <$> digitP) "8not-a-char" @?= Left "Leftover: not-a-char"
      ]
 
 test34 :: TestTree
