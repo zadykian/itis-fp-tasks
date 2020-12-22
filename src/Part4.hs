@@ -49,7 +49,7 @@ instance Applicative Parser where
 -- Написать экземпляр класса Alternative для Parser
 -- (удовлетворяющий законам)
 instance Alternative Parser where
-    
+
     empty :: Parser a
     empty = Parser $ \_ -> []
 
@@ -62,7 +62,13 @@ instance Alternative Parser where
 -- Написать экземпляр класса Monad для Parser
 -- (удовлетворяющий законам)
 instance Monad Parser where
-    (>>=) = error "Implement me!"
+
+    (>>=) :: Parser a -> (a -> Parser b) -> Parser b
+    (Parser parserFunc) >>= funcToBind = Parser resultFunc
+        where
+            resultFunc input = do
+                (stringRem, item) <- parserFunc input
+                runParser (funcToBind item) stringRem
 
 ------------------------------------------------------------
 -- PROBLEM #37
