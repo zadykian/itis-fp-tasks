@@ -77,6 +77,8 @@ instance Monad Parser where
 -- (удовлетворяющий законам)
 
 instance Functor (Foo r) where
+
+    fmap :: (a -> b) -> Foo r a -> Foo r b
     fmap = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #38
@@ -84,7 +86,11 @@ instance Functor (Foo r) where
 -- Написать экземпляр класса Applicative для Foo
 -- (удовлетворяющий законам)
 instance Applicative (Foo r) where
+
+    pure :: a -> Foo r a
     pure = error "Implement me!"
+
+    (<*>) :: Foo r (a -> b) -> Foo r a -> Foo r b
     (<*>) = error "Implement me!"
 
 ------------------------------------------------------------
@@ -93,6 +99,8 @@ instance Applicative (Foo r) where
 -- Написать экземпляр класса Monad для Foo
 -- (удовлетворяющий законам)
 instance Monad (Foo r) where
+
+    (>>=) :: Foo r a -> (a -> Foo r b) -> Foo r b
     (>>=) = error "Implement me!"
 
 ------------------------------------------------------------
