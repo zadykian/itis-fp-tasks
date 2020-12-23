@@ -61,7 +61,9 @@ test36 = testGroup "P36"
   , testCase ">>= 2" $
     parse p "23" @?= Right '2'
   ]
-  where p = do
+  where
+    p :: Parser Char
+    p = do
           x <- anyCharP
           y <- anyCharP
           case x of
@@ -91,6 +93,8 @@ test40 = testGroup "P40"
     parse prob40 "varName:=-1" @?= Right ("varName", -1)
   , testCase ":=0" $
     parse prob40 ":=0" @?= Left "Can't parse"
+  , testCase "varName_:=-1" $
+    parse prob40 "varName_:=-1" @?= Right ("varName_", -1)
   , testCase "varName:=-1" $
     trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
   , testCase "isValidName" $
