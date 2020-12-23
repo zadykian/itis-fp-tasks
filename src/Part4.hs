@@ -161,12 +161,12 @@ variableValueParser = Parser parseFunc
 
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input
-    | hasSingleOperator = undefined
-    | otherwise = Just 
+    | hasSingleOperator = Just 
         (
             trim $ takeWhile (/=':') input,
             trim $ drop (succ $ fromJust $ elemIndex '=' input) input
         )
+    | otherwise = Nothing
     where
         hasSingleOperator :: Bool
         hasSingleOperator =
