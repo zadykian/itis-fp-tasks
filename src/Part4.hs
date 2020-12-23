@@ -18,6 +18,7 @@ import Control.Applicative
 import Control.Monad (msum)
 import Data.Maybe (maybeToList)
 import Data.Char (intToDigit)
+import Text.Read (readMaybe)
 
 ------------------------------------------------------------
 -- PROBLEM #33
@@ -154,7 +155,8 @@ variableValueParser = Parser parseFunc
         parseFunc :: String -> [(String, Integer)]
         parseFunc input = do
             (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator input
-            return undefined
+            validInteger <- maybeToList $ readMaybe numberInput
+            return (input, validInteger)
 
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input = undefined
