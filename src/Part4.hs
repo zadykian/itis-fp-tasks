@@ -16,6 +16,8 @@ import Part4.Types
 
 import Control.Applicative
 import Control.Monad (msum)
+import Data.Maybe (maybeToList)
+import Data.Char (intToDigit)
 
 ------------------------------------------------------------
 -- PROBLEM #33
@@ -127,11 +129,29 @@ variableNameParser :: Parser String
 variableNameParser = Parser parseFunc
     where
         parseFunc :: String -> [(String, String)]
-        parseFunc = undefined
+        parseFunc input = do
+            (nameInput, _) <- maybeToList $ trySplitByAssignmentOperator input
+            True <- return $ all isValidChar nameInput
+            return ("", nameInput)
+
+        isValidChar :: Char -> Bool
+        isValidChar = flip elem $ concat 
+            [ 
+                ['a'..'z'],
+                ['A', 'Z'],
+                map intToDigit [0..9],
+                ['_']
+            ]
 
 -- Парсер, вычленяющий значение переменной из выражения присвоения.
 variableValueParser :: Parser Integer
 variableValueParser = Parser parseFunc
     where
         parseFunc :: String -> [(String, Integer)]
-        parseFunc = undefined
+        parseFunc input = do
+            (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator input
+            return undefined
+
+trySplitByAssignmentOperator :: String -> Maybe (String, String)
+trySplitByAssignmentOperator input = undefined
+    
