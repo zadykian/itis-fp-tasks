@@ -83,4 +83,10 @@ test40 = testGroup "P40"
     parse prob40 "varName_1:=123" @?= Right ("varName_1", 123)
   , testCase "theVAR  :=  -3456" $
     parse prob40 "theVAR  :=  -3456" @?= Right ("theVAR", -3456)
+  , testCase "trySplit" $
+    trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
+  , testCase "isValidName" $
+    isValidVariableName "varName_1" @?= True
+  , testCase "variableNameParser" $
+    parse variableNameParser "varName_1:=123" @?= Right "varName_1"
   ]

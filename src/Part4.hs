@@ -136,10 +136,11 @@ variableNameParser = Parser parseFunc
             True <- return $ isValidVariableName nameInput
             return (assignmentExpr, nameInput)
 
-        isValidVariableName :: String -> Bool
-        isValidVariableName [] = False
-        isValidVariableName variableName@(firstChar : _) = elem firstChar ['a'..'z'] && all isValidChar variableName 
-
+-- Является ли строка валидным именем переменной.
+isValidVariableName :: String -> Bool
+isValidVariableName [] = False
+isValidVariableName (firstChar : nameTail) = elem firstChar ['a'..'z'] && all isValidChar nameTail
+    where 
         isValidChar :: Char -> Bool
         isValidChar = flip elem $ concat
             [
@@ -171,8 +172,11 @@ trySplitByAssignmentOperator input
         hasSingleOperator :: Bool
         hasSingleOperator =
             isInfixOf ":=" input 
-            && length (filter (==':') input) == 0
-            && length (filter (=='=') input) == 0
-        
+            && single (==':') input
+            && single (=='=') input
+
         trim :: String -> String
         trim = dropWhile isSpace . dropWhileEnd isSpace
+        
+        single :: (a -> Bool) -> [a] -> Bool
+        single predicate list = length (filter predicate list) == 1
