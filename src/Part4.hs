@@ -134,7 +134,7 @@ variableNameParser = Parser parseFunc
         parseFunc assignmentExpr = do
             (nameInput, _) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
             True <- return $ isValidVariableName nameInput
-            return ("", nameInput)
+            return (assignmentExpr, nameInput)
 
 -- Является ли строка валидным именем переменной.
 isValidVariableName :: String -> Bool
