@@ -19,6 +19,7 @@ import Control.Monad (msum)
 import Data.Maybe (maybeToList)
 import Data.Char (intToDigit)
 import Text.Read (readMaybe)
+import Data.List (isInfixOf)
 
 ------------------------------------------------------------
 -- PROBLEM #33
@@ -137,7 +138,7 @@ variableNameParser = Parser parseFunc
 
         isValidVariableName :: String -> Bool
         isValidVariableName [] = False
-        isValidVariableName variableName@(firstChar : _) = all isValidChar variableName && elem firstChar ['a'..'z']
+        isValidVariableName variableName@(firstChar : _) = elem firstChar ['a'..'z'] && all isValidChar variableName 
 
         isValidChar :: Char -> Bool
         isValidChar = flip elem $ concat
@@ -159,4 +160,9 @@ variableValueParser = Parser parseFunc
             return (input, validInteger)
 
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
-trySplitByAssignmentOperator input = undefined
+trySplitByAssignmentOperator input
+    | hasSingleOperator = undefined
+    | otherwise = Nothing
+    where
+        hasSingleOperator :: Bool
+        hasSingleOperator = isInfixOf ":=" input
