@@ -16,10 +16,10 @@ import Part4.Types
 
 import Control.Applicative
 import Control.Monad (msum)
-import Data.Maybe (maybeToList)
-import Data.Char (intToDigit)
+import Data.Maybe (maybeToList, fromJust)
+import Data.Char (intToDigit, isSpace)
 import Text.Read (readMaybe)
-import Data.List (isInfixOf)
+import Data.List (isInfixOf, dropWhileEnd, elemIndex)
 
 ------------------------------------------------------------
 -- PROBLEM #33
@@ -162,7 +162,17 @@ variableValueParser = Parser parseFunc
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input
     | hasSingleOperator = undefined
-    | otherwise = Nothing
+    | otherwise = Just 
+        (
+            trim $ takeWhile (/=':') input,
+            trim $ drop (succ $ fromJust $ elemIndex '=' input) input
+        )
     where
         hasSingleOperator :: Bool
-        hasSingleOperator = isInfixOf ":=" input
+        hasSingleOperator =
+            isInfixOf ":=" input 
+            && length (filter (==':') input) == 0
+            && length (filter (=='=') input) == 0
+        
+        trim :: String -> String
+        trim = dropWhile isSpace . dropWhileEnd isSpace
