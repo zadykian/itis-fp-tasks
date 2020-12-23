@@ -120,4 +120,18 @@ instance Monad (Foo r) where
 -- В качестве результата парсер должен вернуть пару
 -- (имя переменной, присваиваемое число)
 prob40 :: Parser (String, Integer)
-prob40 = error "Implement me!"
+prob40 = (,) <$> variableNameParser <*> variableValueParser
+
+-- Парсер, вычленяющий имя переменной из выражения присвоения.
+variableNameParser :: Parser String
+variableNameParser = Parser parseFunc
+    where
+        parseFunc :: String -> [(String, String)]
+        parseFunc = undefined
+
+-- Парсер, вычленяющий значение переменной из выражения присвоения.
+variableValueParser :: Parser Integer
+variableValueParser = Parser parseFunc
+    where
+        parseFunc :: String -> [(String, Integer)]
+        parseFunc = undefined
