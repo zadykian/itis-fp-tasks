@@ -30,12 +30,20 @@ test33 = testGroup "P33" $ let
        parse (id <$> digitP) "1" @?= Right '1'
      , testCase "fmap f . fmap g" $
        parse (toDigit <$> digitP) "1" @?= Right 1
+     , testCase "fmap id can't parse" $
+       parse (id <$> digitP) "not-a-char" @?= Left "Can't parse"
+     , testCase "fmap id fail" $
+       parse (id <$> digitP) "8not-a-char" @?= Left "Leftover: not-a-char"
      ]
 
 test34 :: TestTree
 test34 = testGroup "P34"
-  [ testCase "<*>" $
+  [ testCase "<*> (,)" $
     parse ((,) <$> digitP <*> digitP) "12" @?= Right ('1','2')
+  , testCase "<*> (,,)" $
+    parse ((,,) <$> digitP <*> digitP <*> digitP) "123" @?= Right ('1','2','3')
+  , testCase "<*> (,,) failure" $
+    parse ((,,) <$> digitP <*> digitP <*> digitP) "12A" @?= Left "Can't parse"
   , testCase "pure" $
     parse (pure 123) "12" @?= Left "Leftover: 12"
   ]
@@ -75,4 +83,10 @@ test40 = testGroup "P40"
     parse prob40 "varName_1:=123" @?= Right ("varName_1", 123)
   , testCase "theVAR  :=  -3456" $
     parse prob40 "theVAR  :=  -3456" @?= Right ("theVAR", -3456)
+  , testCase "trySplit" $
+    trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
+  , testCase "isValidName" $
+    isValidVariableName "varName_1" @?= True
+  , testCase "variableValueParser" $
+    parse variableValueParser "varName_1 := 123" @?= Right 123    
   ]

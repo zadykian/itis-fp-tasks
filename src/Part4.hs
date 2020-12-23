@@ -1,3 +1,5 @@
+{-# LANGUAGE InstanceSigs #-}
+
 module Part4 where
 
 -- | 8 tasks:
@@ -13,6 +15,11 @@ module Part4 where
 import Part4.Types
 
 import Control.Applicative
+import Control.Monad (msum)
+import Data.Maybe (maybeToList, fromJust)
+import Data.Char (intToDigit, isSpace)
+import Text.Read (readMaybe)
+import Data.List (isInfixOf, dropWhileEnd, elemIndex)
 
 ------------------------------------------------------------
 -- PROBLEM #33
@@ -20,7 +27,8 @@ import Control.Applicative
 -- Написать экземпляр класса Functor для Parser
 -- (удовлетворяющий законам)
 instance Functor Parser where
-    fmap = error "Implement me!"
+    fmap :: (a -> b) -> Parser a -> Parser b
+    fmap func (Parser parseFunc) = Parser $ (map (\(str, input) -> (str, func input))) . parseFunc
 
 ------------------------------------------------------------
 -- PROBLEM #34
@@ -28,8 +36,16 @@ instance Functor Parser where
 -- Написать экземпляр класса Applicative для Parser
 -- (удовлетворяющий законам)
 instance Applicative Parser where
-    pure = error "Implement me!"
-    (<*>) = error "Implement me!"
+    pure :: a -> Parser a
+    pure value = Parser $ \str -> [(str, value)]
+
+    (<*>) :: Parser (a -> b) -> Parser a -> Parser b
+    (Parser leftFunc) <*> (Parser rightFunc) = Parser parserFunc
+        where
+            parserFunc input = do
+                (leftString, funcToApply) <- (leftFunc input)
+                (rightString, item) <- (rightFunc leftString)
+                return (rightString, funcToApply item)
 
 ------------------------------------------------------------
 -- PROBLEM #35
@@ -37,8 +53,12 @@ instance Applicative Parser where
 -- Написать экземпляр класса Alternative для Parser
 -- (удовлетворяющий законам)
 instance Alternative Parser where
-    empty = error "Implement me!"
-    (<|>) = error "Implement me!"
+
+    empty :: Parser a
+    empty = Parser $ \_ -> []
+
+    (<|>) :: Parser a -> Parser a -> Parser a
+    (Parser left) <|> (Parser right) = Parser $ \str -> msum $ map ($ str) [left, right]
 
 ------------------------------------------------------------
 -- PROBLEM #36
@@ -46,7 +66,13 @@ instance Alternative Parser where
 -- Написать экземпляр класса Monad для Parser
 -- (удовлетворяющий законам)
 instance Monad Parser where
-    (>>=) = error "Implement me!"
+
+    (>>=) :: Parser a -> (a -> Parser b) -> Parser b
+    (Parser parserFunc) >>= funcToBind = Parser resultFunc
+        where
+            resultFunc input = do
+                (stringRem, item) <- parserFunc input
+                runParser (funcToBind item) stringRem
 
 ------------------------------------------------------------
 -- PROBLEM #37
@@ -55,6 +81,8 @@ instance Monad Parser where
 -- (удовлетворяющий законам)
 
 instance Functor (Foo r) where
+
+    fmap :: (a -> b) -> Foo r a -> Foo r b
     fmap = error "Implement me!"
 ------------------------------------------------------------
 -- PROBLEM #38
@@ -62,7 +90,11 @@ instance Functor (Foo r) where
 -- Написать экземпляр класса Applicative для Foo
 -- (удовлетворяющий законам)
 instance Applicative (Foo r) where
+
+    pure :: a -> Foo r a
     pure = error "Implement me!"
+
+    (<*>) :: Foo r (a -> b) -> Foo r a -> Foo r b
     (<*>) = error "Implement me!"
 
 ------------------------------------------------------------
@@ -71,6 +103,8 @@ instance Applicative (Foo r) where
 -- Написать экземпляр класса Monad для Foo
 -- (удовлетворяющий законам)
 instance Monad (Foo r) where
+
+    (>>=) :: Foo r a -> (a -> Foo r b) -> Foo r b
     (>>=) = error "Implement me!"
 
 ------------------------------------------------------------
@@ -90,4 +124,59 @@ instance Monad (Foo r) where
 -- В качестве результата парсер должен вернуть пару
 -- (имя переменной, присваиваемое число)
 prob40 :: Parser (String, Integer)
-prob40 = error "Implement me!"
+prob40 = (,) <$> variableNameParser <*> variableValueParser
+
+-- Парсер, вычленяющий имя переменной из выражения присвоения.
+variableNameParser :: Parser String
+variableNameParser = Parser parseFunc
+    where
+        parseFunc :: String -> [(String, String)]
+        parseFunc assignmentExpr = do
+            (nameInput, _) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
+            True <- return $ isValidVariableName nameInput
+            return (assignmentExpr, nameInput)
+
+-- Является ли строка валидным именем переменной.
+isValidVariableName :: String -> Bool
+isValidVariableName [] = False
+isValidVariableName (firstChar : nameTail) = elem firstChar ['a'..'z'] && all isValidChar nameTail
+    where
+        isValidChar :: Char -> Bool
+        isValidChar = flip elem $ concat
+            [
+                ['a'..'z'],
+                ['A'..'Z'],
+                map intToDigit [0..9],
+                ['_']
+            ]
+
+-- Парсер, вычленяющий значение переменной из выражения присвоения.
+variableValueParser :: Parser Integer
+variableValueParser = Parser parseFunc
+    where
+        parseFunc :: String -> [(String, Integer)]
+        parseFunc assignmentExpr = do
+            (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
+            validInteger <- maybeToList $ readMaybe numberInput
+            return ("", validInteger)
+
+trySplitByAssignmentOperator :: String -> Maybe (String, String)
+trySplitByAssignmentOperator input
+    | hasSingleOperator = Just
+        (
+            trim $ takeWhile (/=':') input,
+            trim $ drop (succ $ fromJust $ elemIndex '=' input) input
+        )
+    | otherwise = Nothing
+    where
+        hasSingleOperator :: Bool
+        hasSingleOperator =
+            isInfixOf ":=" input
+            && single (==':') input
+            && single (=='=') input
+
+        trim :: String -> String
+        trim = dropWhile isSpace . dropWhileEnd isSpace
+
+        single :: (a -> Bool) -> [a] -> Bool
+        single predicate list = length (filter predicate list) == 1
