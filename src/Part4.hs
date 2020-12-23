@@ -134,18 +134,18 @@ variableNameParser = Parser parseFunc
         parseFunc assignmentExpr = do
             (nameInput, _) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
             True <- return $ isValidVariableName nameInput
-            return (assignmentExpr, nameInput)
+            return ("", nameInput)
 
 -- Является ли строка валидным именем переменной.
 isValidVariableName :: String -> Bool
 isValidVariableName [] = False
 isValidVariableName (firstChar : nameTail) = elem firstChar ['a'..'z'] && all isValidChar nameTail
-    where 
+    where
         isValidChar :: Char -> Bool
         isValidChar = flip elem $ concat
             [
                 ['a'..'z'],
-                ['A', 'Z'],
+                ['A'..'Z'],
                 map intToDigit [0..9],
                 ['_']
             ]
@@ -155,14 +155,14 @@ variableValueParser :: Parser Integer
 variableValueParser = Parser parseFunc
     where
         parseFunc :: String -> [(String, Integer)]
-        parseFunc input = do
-            (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator input
+        parseFunc assignmentExpr = do
+            (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
             validInteger <- maybeToList $ readMaybe numberInput
-            return (input, validInteger)
+            return ("", validInteger)
 
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input
-    | hasSingleOperator = Just 
+    | hasSingleOperator = Just
         (
             trim $ takeWhile (/=':') input,
             trim $ drop (succ $ fromJust $ elemIndex '=' input) input
@@ -171,12 +171,12 @@ trySplitByAssignmentOperator input
     where
         hasSingleOperator :: Bool
         hasSingleOperator =
-            isInfixOf ":=" input 
+            isInfixOf ":=" input
             && single (==':') input
             && single (=='=') input
 
         trim :: String -> String
         trim = dropWhile isSpace . dropWhileEnd isSpace
-        
+
         single :: (a -> Bool) -> [a] -> Bool
         single predicate list = length (filter predicate list) == 1

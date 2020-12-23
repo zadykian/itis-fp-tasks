@@ -88,5 +88,7 @@ test40 = testGroup "P40"
   , testCase "isValidName" $
     isValidVariableName "varName_1" @?= True
   , testCase "variableNameParser" $
-    parse variableNameParser "varName_1:=123" @?= Right "varName_1"
+    parse variableNameParser "varName_1 := 123" @?= Right "varName_1"
+  , testCase "variableValueParser" $
+    parse variableValueParser "varName_1 := 123" @?= Right 123    
   ]
