@@ -129,14 +129,18 @@ variableNameParser :: Parser String
 variableNameParser = Parser parseFunc
     where
         parseFunc :: String -> [(String, String)]
-        parseFunc input = do
-            (nameInput, _) <- maybeToList $ trySplitByAssignmentOperator input
-            True <- return $ all isValidChar nameInput
-            return ("", nameInput)
+        parseFunc assignmentExpr = do
+            (nameInput, _) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
+            True <- return $ isValidVariableName nameInput
+            return (assignmentExpr, nameInput)
+
+        isValidVariableName :: String -> Bool
+        isValidVariableName [] = False
+        isValidVariableName variableName@(firstChar : _) = all isValidChar variableName && elem firstChar ['a'..'z']
 
         isValidChar :: Char -> Bool
-        isValidChar = flip elem $ concat 
-            [ 
+        isValidChar = flip elem $ concat
+            [
                 ['a'..'z'],
                 ['A', 'Z'],
                 map intToDigit [0..9],
@@ -154,4 +158,3 @@ variableValueParser = Parser parseFunc
 
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input = undefined
-    
