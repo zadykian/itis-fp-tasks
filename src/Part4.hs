@@ -161,12 +161,17 @@ variableValueParser = Parser parseFunc
 
             -- Проверяем, что между ':=' и числом нет невалидных символов.
             [] <- return $ takeWhile (\char -> (not $ isDigit char) &&  char /= '-') numberInput
-            -- Проверяем, что строковой вид числа не содержит больше одного минуса.
-            True <- return $ (length $ filter (=='-') numberInput) <= 1
+            -- Проверяем, что между ':=' и числом находится не более одного минуса.
+            True <- return $ 
+                (length $ filter (=='-') 
+                (takeWhile (not . isDigit) numberInput)) <= 1
 
             return $ case readMaybe numberInput of
                 Just validInteger -> ("", validInteger)
                 Nothing -> (takeInvalidTail numberInput, 0)
+
+            -- validInteger <- maybeToList $ readMaybe numberInput
+            -- return ("", validInteger)
 
 -- Получить список невалидных символов, расположенных в конце выражения (справа от числа).
 takeInvalidTail :: String -> String

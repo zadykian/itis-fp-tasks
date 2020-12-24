@@ -46,23 +46,7 @@ test34 = testGroup "P34"
     parse ((,,) <$> digitP <*> digitP <*> digitP) "12A" @?= Left "Can't parse"
   , testCase "pure" $
     parse (pure 123) "12" @?= Left "Leftover: 12"
-  --, testCase "composition" $
-  --  parse (pure (.) <*> testParser <*> test2Parser) "1" @?= Right ("", 1)
   ]
-
--- withCompositionOperator :: Parser Int
--- withCompositionOperator = pure (flip (.)) <*> charToCharParser <*> charToIntParser <*> digitP
-
--- directApplication = charToIntParser <*> (charToCharParser <*> digitP)
-
--- charToIntParser :: Parser (Char -> Int)
--- charToIntParser = undefined
-
--- charToCharParser :: Parser (Char -> Char)
--- charToCharParser = undefined
-
--- evenDigitParser :: Parser Char
--- evenDigitParser = satisfyP $ (flip elem) ['0', '2', '4', '6', '8']
 
 test35 :: TestTree
 test35 = testGroup "P35"
@@ -110,10 +94,20 @@ test40 = testGroup "P40"
   , testCase "trySplitByAssignmentOperator \"varName := --1\"" $
     trySplitByAssignmentOperator "varName := --1" @?= Just ("varName", "--1")
 
-  , testCase "isValidName" $
+  , testCase "isValidVariableName \"varName_1\"" $
     isValidVariableName "varName_1" @?= True
+  , testCase "isValidVariableName \"a___\"" $
+    isValidVariableName "a___" @?= True
+
   , testCase "variableValueParser" $
-    parse variableValueParser "varName_1 := 123" @?= Right 123
+    parse variableValueParser ":= 123" @?= Right 123
+  , testCase "variableValueParser" $
+    parse variableValueParser ":= --1" @?= Left "Can't parse"
+  , testCase "variableValueParser" $
+    parse variableValueParser ":= --1-" @?= Left "Can't parse"
+  , testCase "variableValueParser" $
+    parse variableValueParser ":= -1-" @?= Left "Leftover: -"
+
   , testCase "takeInvalidTail \"varName_1 := 123\"" $
     takeInvalidTail "varName_1 := 123" @?= ""
   , testCase "takeInvalidTail \" - - 1\"" $
