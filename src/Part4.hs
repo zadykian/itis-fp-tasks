@@ -158,10 +158,15 @@ variableValueParser = Parser parseFunc
         parseFunc :: String -> [(String, Integer)]
         parseFunc assignmentExpr = do
             (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
+
+            -- Проверяем, что между ':=' и числом нет невалидных символов.
+            [] <- return $ takeWhile (\char -> (not $ isDigit char) &&  char /= '-') numberInput
+
             return $ case readMaybe numberInput of
                 Just validInteger -> ("", validInteger)
                 Nothing -> (takeInvalidEnd assignmentExpr, 0)
 
+        -- Получаем список невалидных символов, расположенных после числа.
         takeInvalidEnd :: String -> String
         takeInvalidEnd = reverse . takeWhile (not . isDigit) . reverse 
 

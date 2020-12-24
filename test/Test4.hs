@@ -118,7 +118,7 @@ test40 = testGroup "P40"
   , testCase "varName := 1234_" $
     parse prob40 "varName := 1234_" @?= Left "Leftover: _"
   , testCase "varName := _1234_" $
-    parse prob40 "varName := 1234_" @?= Left "Can't parse"
+    parse prob40 "varName := _1234_" @?= Left "Can't parse"
 
   , testCase "varName:=-1" $
     trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
