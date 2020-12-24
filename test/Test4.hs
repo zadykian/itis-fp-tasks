@@ -46,7 +46,26 @@ test34 = testGroup "P34"
     parse ((,,) <$> digitP <*> digitP <*> digitP) "12A" @?= Left "Can't parse"
   , testCase "pure" $
     parse (pure 123) "12" @?= Left "Leftover: 12"
+  --, testCase "composition" $
+  --  parse (pure (.) <*> testParser <*> test2Parser) "1" @?= Right ("", 1)
   ]
+
+b :: Parser Int
+b = pure (flip (.)) <*> charToCharParser <*> charToIntParser <*> c
+
+d = charToIntParser <*> (charToCharParser <*> c)
+
+c :: Parser Char
+c = undefined
+
+charToIntParser :: Parser (Char -> Int)
+charToIntParser = undefined
+
+charToCharParser :: Parser (Char -> Char)
+charToCharParser = undefined
+
+evenDigitParser :: Parser Char
+evenDigitParser = satisfyP $ (flip elem) ['0', '2', '4', '6', '8']
 
 test35 :: TestTree
 test35 = testGroup "P35"
@@ -93,8 +112,12 @@ test40 = testGroup "P40"
     parse prob40 "varName:=-1" @?= Right ("varName", -1)
   , testCase ":=0" $
     parse prob40 ":=0" @?= Left "Can't parse"
+  , testCase " := 123 " $
+    parse prob40 " := 123 " @?= Left "Can't parse"
   , testCase "varName_:=-1" $
     parse prob40 "varName_:=-1" @?= Right ("varName_", -1)
+  , testCase "_ := 123 " $
+    parse prob40 "_ := 123 " @?= Left "Can't parse"
   , testCase "varName:=-1" $
     trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
   , testCase "isValidName" $
