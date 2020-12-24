@@ -17,7 +17,7 @@ import Part4.Types
 import Control.Applicative
 import Control.Monad (msum)
 import Data.Maybe (maybeToList, fromJust)
-import Data.Char (intToDigit, isSpace)
+import Data.Char (intToDigit, isSpace, isDigit)
 import Text.Read (readMaybe)
 import Data.List (isInfixOf, dropWhileEnd, elemIndex)
 
@@ -160,7 +160,10 @@ variableValueParser = Parser parseFunc
             (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
             return $ case readMaybe numberInput of
                 Just validInteger -> ("", validInteger)
-                Nothing -> (assignmentExpr, 0)
+                Nothing -> (takeInvalidEnd assignmentExpr, 0)
+
+        takeInvalidEnd :: String -> String
+        takeInvalidEnd = reverse . takeWhile (not . isDigit) . reverse 
 
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input
