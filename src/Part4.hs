@@ -167,8 +167,12 @@ variableValueParser = Parser parseFunc
 
             -- Проверяем, что между ':=' и числом находится не более одного минуса.
             True <- return $ 
-                (length $ filter (=='-') 
+                (length $ filter (=='-')
                 (takeWhile (not . isDigit) numberInput)) <= 1
+
+            True <- return $ case (dropWhile (\char -> char == '-' || isSpace char) numberInput) of
+                (x : _) -> isDigit x
+                _ -> False
 
             return $ case readMaybe numberInput of
                 Just validInteger -> ("", validInteger)
