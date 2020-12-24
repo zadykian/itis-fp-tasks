@@ -175,15 +175,21 @@ test29 = testGroup "P29"
 
 test30 :: TestTree
 test30 = testGroup "P30"
-  [ testCase "prob30 4 == 6"    $ prob30 4  @?= 6
-  , testCase "prob30 5 == 28"   $ prob30 5  @?= 28
-  , testCase "prob30 7 == 66"   $ prob30 7  @?= 36
-  , testCase "prob30 16 == 120" $ prob30 16 @?= 120
-  , testCase "prob30 20 == 528" $ prob30 20 @?= 528
-  , testCase "prob30 24 == 630" $ prob30 24 @?= 630
+  [ testCase "prob30 -1 == 0"   $ prob30 (-1) @?= 0
+  , testCase "prob30 0 == 0"    $ prob30 0    @?= 0
+  , testCase "prob30 1 == 1"    $ prob30 1    @?= 1
+  , testCase "prob30 4 == 6"    $ prob30 4    @?= 6
+  , testCase "prob30 5 == 28"   $ prob30 5    @?= 28
+  , testCase "prob30 7 == 66"   $ prob30 7    @?= 36
+  , testCase "prob30 16 == 120" $ prob30 16   @?= 120
+  , testCase "prob30 20 == 528" $ prob30 20   @?= 528
+  , testCase "prob30 24 == 630" $ prob30 24   @?= 630
 
   , testCase "triangulars"      $
     (all (== True) $ zipWith (==) triangularNumbers finiteTriangularNumbers) @?= True
+
+  , testCase "divisors-of-zero" $ getAllUnorderedDivisors 0 @?= []
+  , testCase "divisors-of-one"  $ getAllUnorderedDivisors 1 @?= [1]
   ]
 
 finiteTriangularNumbers :: [Integer]

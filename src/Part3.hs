@@ -58,7 +58,12 @@ getUnorderedDivisors number = (leftPart++)
     $ concat [ [x, number `div` x] | x <- [2..limit], number `rem` x == 0 ]
     where
         limit = (floor . sqrt . fromIntegral) number
-        leftPart = if number == 1 then [] else [1]
+        leftPart = if number == 0 || number == 1 then [] else [1]
+
+-- Получить все делители числа.
+getAllUnorderedDivisors :: Integer -> [Integer]
+getAllUnorderedDivisors number = self ++ getUnorderedDivisors number
+    where self = if number == 0 then [] else [number]
 
 ------------------------------------------------------------
 -- PROBLEM #22
@@ -207,7 +212,7 @@ prob29 kLength = maximum [(x * y) |
 -- заданного количества делителей
 prob30 :: Int -> Integer
 prob30 reqCount = head $
-    filter (\triangular -> (succ . length . getUnorderedDivisors) triangular >= reqCount)
+    filter (\triangular -> (length . getAllUnorderedDivisors) triangular >= reqCount)
     triangularNumbers
 
 -- Бесконечный список треугольных чисел.
