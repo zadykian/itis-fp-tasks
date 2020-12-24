@@ -161,6 +161,10 @@ variableValueParser = Parser parseFunc
 
             -- Проверяем, что между ':=' и числом нет невалидных символов.
             [] <- return $ takeWhile (\char -> (not $ isDigit char) &&  char /= '-') numberInput
+
+            -- Проверяем, что справа от ':=' есть хотя бы одна цифра.
+            True <- return $ any isDigit numberInput
+
             -- Проверяем, что между ':=' и числом находится не более одного минуса.
             True <- return $ 
                 (length $ filter (=='-') 

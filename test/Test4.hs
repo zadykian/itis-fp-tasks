@@ -107,6 +107,8 @@ test40 = testGroup "P40"
     parse variableValueParser ":= --1-" @?= Left "Can't parse"
   , testCase "variableValueParser" $
     parse variableValueParser ":= -1-" @?= Left "Leftover: -"
+  , testCase "variableValueParser" $
+    parse variableValueParser ":= -" @?= Left "Can't parse"
 
   , testCase "takeInvalidTail \"varName_1 := 123\"" $
     takeInvalidTail "varName_1 := 123" @?= ""
