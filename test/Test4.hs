@@ -90,9 +90,11 @@ test40 = testGroup "P40"
   , testCase "trySplitByAssignmentOperator \" : = \"" $
     trySplitByAssignmentOperator " : = " @?= Nothing
   , testCase "trySplitByAssignmentOperator \":==\"" $
-    trySplitByAssignmentOperator ":==" @?= Nothing
+    trySplitByAssignmentOperator ":==" @?= Just ("", "=")
   , testCase "trySplitByAssignmentOperator \"varName := --1\"" $
     trySplitByAssignmentOperator "varName := --1" @?= Just ("varName", "--1")
+  , testCase "trySplitByAssignmentOperator \"var:Na:=me =\"" $
+    trySplitByAssignmentOperator "var:Na:=me =" @?= Just ("var:Na", "me =")
 
   , testCase "isValidVariableName \"varName_1\"" $
     isValidVariableName "varName_1" @?= True
@@ -142,8 +144,6 @@ test40 = testGroup "P40"
     parse prob40 "theVAR  :=  -3456" @?= Right ("theVAR", -3456)
   , testCase "varName_1234  :=  -  3456" $
     parse prob40 "varName_1234  :=  -  3456" @?= Right ("varName_1234", -3456)
-  , testCase "varName_1:=123:=123" $
-    parse prob40 "varName_1:=123:=123" @?= Left "Can't parse"
   , testCase "VarName_1:=123" $
     parse prob40 "VarName_1:=-1" @?= Left "Can't parse"
   , testCase "varName:=-1" $
@@ -178,5 +178,7 @@ test40 = testGroup "P40"
   , testCase "varName := 1234:" $
     parse prob40 "varName := 1234:" @?= Left "Leftover: :"
   , testCase "varName := 1234=" $
-    parse prob40 "varName := 1234:" @?= Left "Leftover: ="
+    parse prob40 "varName := 1234=" @?= Left "Leftover: ="
+  , testCase "varName := 1234:=1" $
+    parse prob40 "varName := 1234:=1" @?= Left "Leftover: :=1"
   ]

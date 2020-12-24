@@ -170,6 +170,7 @@ variableValueParser = Parser parseFunc
                 (length $ filter (=='-')
                 (takeWhile (not . isDigit) numberInput)) <= 1
 
+            -- Проверяем, что справа от минусов и пробелов находится число.
             True <- return $ case (dropWhile (\char -> char == '-' || isSpace char) numberInput) of
                 (x : _) -> isDigit x
                 _ -> False
@@ -184,24 +185,15 @@ takeInvalidTail ('-' : digitTail) = dropWhile isDigit digitTail
 takeInvalidTail numberString = dropWhile isDigit numberString
 
 -- Разбить строку на две подстроки, расположенные
--- соответственно слева и справа от оператора присвоения ':='.
+-- соответственно слева и справа от самого левого оператора присвоения ':='.
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input
-    | hasSingleOperator = Just
+    | isInfixOf ":=" input = Just
         (
             trim $ takeWhile (/=':') input,
             trim $ drop (succ $ fromJust $ elemIndex '=' input) input
         )
     | otherwise = Nothing
     where
-        hasSingleOperator :: Bool
-        hasSingleOperator =
-            isInfixOf ":=" input
-            && single (==':') input
-            && single (=='=') input
-
         trim :: String -> String
         trim = dropWhile isSpace . dropWhileEnd isSpace
-
-        single :: (a -> Bool) -> [a] -> Bool
-        single predicate list = length (filter predicate list) == 1
