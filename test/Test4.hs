@@ -162,12 +162,21 @@ test40 = testGroup "P40"
     parse prob40 "varName := 1234_invalid_" @?= Left "Leftover: _invalid_"
   , testCase "varName := 1234-" $
     parse prob40 "varName := 1234-" @?= Left "Leftover: -"
-
   , testCase "varName := --1" $
     parse prob40 "varName := --1" @?= Left "Can't parse"
   , testCase "varName := - - 1" $
     parse prob40 "varName := - - 1" @?= Left "Can't parse"
-
   , testCase "varName := _1234_" $
     parse prob40 "varName := _1234_" @?= Left "Can't parse"
+  
+  , testCase ":= varName := 1234" $
+    parse prob40 ":= varName := 1234" @?= Left "Can't parse"
+  , testCase "varName :=:= 1234" $
+    parse prob40 "varName :=:= 1234" @?= Left "Can't parse"
+  , testCase "varName := 1234:=" $
+    parse prob40 "varName := 1234:=" @?= Left "Leftover: :="
+  , testCase "varName := 1234:" $
+    parse prob40 "varName := 1234:" @?= Left "Leftover: :"
+  , testCase "varName := 1234=" $
+    parse prob40 "varName := 1234:" @?= Left "Leftover: ="
   ]
