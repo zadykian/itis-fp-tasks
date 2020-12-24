@@ -50,22 +50,19 @@ test34 = testGroup "P34"
   --  parse (pure (.) <*> testParser <*> test2Parser) "1" @?= Right ("", 1)
   ]
 
-b :: Parser Int
-b = pure (flip (.)) <*> charToCharParser <*> charToIntParser <*> c
+-- withCompositionOperator :: Parser Int
+-- withCompositionOperator = pure (flip (.)) <*> charToCharParser <*> charToIntParser <*> digitP
 
-d = charToIntParser <*> (charToCharParser <*> c)
+-- directApplication = charToIntParser <*> (charToCharParser <*> digitP)
 
-c :: Parser Char
-c = undefined
+-- charToIntParser :: Parser (Char -> Int)
+-- charToIntParser = undefined
 
-charToIntParser :: Parser (Char -> Int)
-charToIntParser = undefined
+-- charToCharParser :: Parser (Char -> Char)
+-- charToCharParser = undefined
 
-charToCharParser :: Parser (Char -> Char)
-charToCharParser = undefined
-
-evenDigitParser :: Parser Char
-evenDigitParser = satisfyP $ (flip elem) ['0', '2', '4', '6', '8']
+-- evenDigitParser :: Parser Char
+-- evenDigitParser = satisfyP $ (flip elem) ['0', '2', '4', '6', '8']
 
 test35 :: TestTree
 test35 = testGroup "P35"
@@ -118,9 +115,11 @@ test40 = testGroup "P40"
     parse prob40 "varName_:=-1" @?= Right ("varName_", -1)
   , testCase "_ := 123 " $
     parse prob40 "_ := 123 " @?= Left "Can't parse"
-  , testCase "varName := 1234" $
+  , testCase "varName := 1234_" $
     parse prob40 "varName := 1234_" @?= Left "Leftover: _"
-    
+  , testCase "varName := _1234_" $
+    parse prob40 "varName := 1234_" @?= Left "Can't parse"
+
   , testCase "varName:=-1" $
     trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
   , testCase "isValidName" $

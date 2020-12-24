@@ -158,8 +158,9 @@ variableValueParser = Parser parseFunc
         parseFunc :: String -> [(String, Integer)]
         parseFunc assignmentExpr = do
             (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
-            validInteger <- maybeToList $ readMaybe numberInput
-            return ("", validInteger)
+            return $ case readMaybe numberInput of
+                Just validInteger -> ("", validInteger)
+                Nothing -> (assignmentExpr, 0)
 
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input
