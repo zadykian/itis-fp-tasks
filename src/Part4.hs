@@ -161,6 +161,7 @@ variableValueParser = Parser parseFunc
 
             -- Проверяем, что между ':=' и числом нет невалидных символов.
             [] <- return $ takeWhile (\char -> (not $ isDigit char) &&  char /= '-') numberInput
+            True <- return $ (length $ filter (=='-') numberInput) <= 1
 
             return $ case readMaybe numberInput of
                 Just validInteger -> ("", validInteger)
