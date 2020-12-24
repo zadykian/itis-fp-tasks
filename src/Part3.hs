@@ -208,13 +208,14 @@ prob29 kLength = maximum [(x * y) |
 prob30 :: Int -> Integer
 prob30 reqCount = head $
     filter (\triangular -> (succ . length . getUnorderedDivisors) triangular >= reqCount)
-    generateTriangular
+    triangularNumbers
+
+-- Бесконечный список треугольных чисел.
+triangularNumbers :: [Integer]
+triangularNumbers = triangularWithCurrent 0 1
     where
-        generateTriangular :: [Integer]
-        generateTriangular = triangularWithCurrent 0 1
-            where
-                triangularWithCurrent :: Integer -> Integer -> [Integer]
-                triangularWithCurrent current next = current : triangularWithCurrent (current + next) (succ next)
+        triangularWithCurrent :: Integer -> Integer -> [Integer]
+        triangularWithCurrent current next = current : triangularWithCurrent (current + next) (succ next)
 
 ------------------------------------------------------------
 -- PROBLEM #31
@@ -223,14 +224,23 @@ prob30 reqCount = head $
 -- меньших заданного N (1 <= N <= 10000)
 prob31 :: Int -> Int
 prob31 maxValue = sum $ map (\(left, right) -> left + right) amicablePairs
-    where 
-        amicablePairs = concat $ map getAmicableItem [1 .. pred maxValue]
-        getAmicableItem currentItem = 
-            let amicableItem = divisorsSum currentItem
+    where
+        amicablePairs :: [(Int, Int)]
+        amicablePairs = concat $ map getAmicablePair [1 .. pred maxValue]
+
+        getAmicablePair :: Int -> [(Int, Int)]
+        getAmicablePair leftNumber =
+            let amicableNumberValue = divisorsSum leftNumber
             in bool
-               [] 
-               [(currentItem, amicableItem)] 
-               (currentItem < amicableItem && currentItem == divisorsSum amicableItem && amicableItem < maxValue)
+               []
+               [(leftNumber, amicableNumberValue)]
+               (
+                   leftNumber < amicableNumberValue 
+                   && leftNumber == divisorsSum amicableNumberValue 
+                   && amicableNumberValue < maxValue
+               )
+
+        divisorsSum :: Int -> Int
         divisorsSum = sum . getUnorderedDivisors
 
 ------------------------------------------------------------
