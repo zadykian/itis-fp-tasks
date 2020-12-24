@@ -176,7 +176,8 @@ variableValueParser = Parser parseFunc
 
 -- Получить список невалидных символов, расположенных в конце выражения (справа от числа).
 takeInvalidTail :: String -> String
-takeInvalidTail = reverse . takeWhile (not . isDigit) . reverse
+takeInvalidTail ('-' : digitTail) = dropWhile isDigit digitTail
+takeInvalidTail numberString = dropWhile isDigit numberString
 
 -- Разбить строку на две подстроки, расположенные
 -- соответственно слева и справа от оператора присвоения ':='.
