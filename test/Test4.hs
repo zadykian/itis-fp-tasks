@@ -99,16 +99,22 @@ test40 = testGroup "P40"
   , testCase "isValidVariableName \"a___\"" $
     isValidVariableName "a___" @?= True
 
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"123\"" $
     parse variableValueParser ":= 123" @?= Right 123
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"--1\"" $
     parse variableValueParser ":= --1" @?= Left "Can't parse"
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"--1-\"" $
     parse variableValueParser ":= --1-" @?= Left "Can't parse"
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"-1-\"" $
     parse variableValueParser ":= -1-" @?= Left "Leftover: -"
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"-\"" $
     parse variableValueParser ":= -" @?= Left "Can't parse"
+  , testCase "variableValueParser \"1-1\"" $
+    parse variableValueParser ":= 1-1" @?= Left "Leftover: -1"
+  , testCase "variableValueParser \"123 123\"" $
+    parse variableValueParser ":= 123 123" @?= Left "Leftover:  123"
+  , testCase "variableValueParser \"\"" $
+    parse variableValueParser ":=" @?= Left "Can't parse"
 
   , testCase "takeInvalidTail \"varName_1 := 123\"" $
     takeInvalidTail "varName_1 := 123" @?= ""
