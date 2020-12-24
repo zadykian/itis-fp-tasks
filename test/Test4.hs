@@ -99,23 +99,34 @@ test40 = testGroup "P40"
   , testCase "isValidVariableName \"a___\"" $
     isValidVariableName "a___" @?= True
 
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"123\"" $
     parse variableValueParser ":= 123" @?= Right 123
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"--1\"" $
     parse variableValueParser ":= --1" @?= Left "Can't parse"
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"--1-\"" $
     parse variableValueParser ":= --1-" @?= Left "Can't parse"
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"-1-\"" $
     parse variableValueParser ":= -1-" @?= Left "Leftover: -"
-  , testCase "variableValueParser" $
+  , testCase "variableValueParser \"-\"" $
     parse variableValueParser ":= -" @?= Left "Can't parse"
+  , testCase "variableValueParser \"1-1\"" $
+    parse variableValueParser ":= 1-1" @?= Left "Leftover: -1"
+  , testCase "variableValueParser \"123 -1-\"" $
+    parse variableValueParser ":= 123 -1-" @?= Left "Leftover:  -1-"
+  , testCase "variableValueParser \"123 123\"" $
+    parse variableValueParser ":= 123 123" @?= Left "Leftover:  123"    
+  
+  , testCase "variableValueParser \"\"" $
+    parse variableValueParser ":=" @?= Left "Can't parse"
+  , testCase "variableValueParser \":= -A\"" $
+    parse variableValueParser ":= -A" @?= Left "Can't parse"
 
-  , testCase "takeInvalidTail \"varName_1 := 123\"" $
-    takeInvalidTail "varName_1 := 123" @?= ""
-  , testCase "takeInvalidTail \" - - 1\"" $
-    takeInvalidTail "varName_1 := 123" @?= ""
-  , testCase "takeInvalidTail \"varName_1 := 123\"" $
-    takeInvalidTail "varName_1 := 123" @?= ""
+  , testCase "takeInvalidTail \"123\"" $
+    takeInvalidTail "123" @?= ""
+  , testCase "takeInvalidTail \"123 -1-\"" $
+    takeInvalidTail "123 -1-" @?= " -1-"
+  , testCase "takeInvalidTail \"1-1\"" $
+    takeInvalidTail "1-1" @?= "-1"
 
   , testCase "varName_1:=123" $
     parse prob40 "varName_1:=123" @?= Right ("varName_1", 123)
