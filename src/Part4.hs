@@ -160,15 +160,18 @@ variableValueParser = Parser parseFunc
             (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
 
             -- Проверяем, что между ':=' и числом нет невалидных символов.
-            [] <- return $ takeWhile (\char -> (not $ isDigit char) &&  char /= '-') numberInput
+            -- [] <- return $ takeWhile (\char -> (not $ isDigit char) &&  char /= '-') numberInput
 
-            return $ case readMaybe numberInput of
-                Just validInteger -> ("", validInteger)
-                Nothing -> (takeInvalidEnd assignmentExpr, 0)
+            -- return $ case readMaybe numberInput of
+            --     Just validInteger -> ("", validInteger)
+            --     Nothing -> (takeInvalidEnd assignmentExpr, 0)
+                
+            validInteger <- maybeToList $ readMaybe numberInput
+            return ("", validInteger)
 
         -- Получаем список невалидных символов, расположенных после числа.
-        takeInvalidEnd :: String -> String
-        takeInvalidEnd = reverse . takeWhile (not . isDigit) . reverse 
+        -- takeInvalidEnd :: String -> String
+        -- takeInvalidEnd = reverse . takeWhile (not . isDigit) . reverse 
 
 trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input
