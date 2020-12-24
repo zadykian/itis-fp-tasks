@@ -46,7 +46,23 @@ test34 = testGroup "P34"
     parse ((,,) <$> digitP <*> digitP <*> digitP) "12A" @?= Left "Can't parse"
   , testCase "pure" $
     parse (pure 123) "12" @?= Left "Leftover: 12"
+  --, testCase "composition" $
+  --  parse (pure (.) <*> testParser <*> test2Parser) "1" @?= Right ("", 1)
   ]
+
+-- withCompositionOperator :: Parser Int
+-- withCompositionOperator = pure (flip (.)) <*> charToCharParser <*> charToIntParser <*> digitP
+
+-- directApplication = charToIntParser <*> (charToCharParser <*> digitP)
+
+-- charToIntParser :: Parser (Char -> Int)
+-- charToIntParser = undefined
+
+-- charToCharParser :: Parser (Char -> Char)
+-- charToCharParser = undefined
+
+-- evenDigitParser :: Parser Char
+-- evenDigitParser = satisfyP $ (flip elem) ['0', '2', '4', '6', '8']
 
 test35 :: TestTree
 test35 = testGroup "P35"
@@ -61,7 +77,9 @@ test36 = testGroup "P36"
   , testCase ">>= 2" $
     parse p "23" @?= Right '2'
   ]
-  where p = do
+  where
+    p :: Parser Char
+    p = do
           x <- anyCharP
           y <- anyCharP
           case x of
@@ -83,7 +101,26 @@ test40 = testGroup "P40"
     parse prob40 "varName_1:=123" @?= Right ("varName_1", 123)
   , testCase "theVAR  :=  -3456" $
     parse prob40 "theVAR  :=  -3456" @?= Right ("theVAR", -3456)
-  , testCase "trySplit" $
+  , testCase "varName_1:=123:=123" $
+    parse prob40 "varName_1:=123:=123" @?= Left "Can't parse"
+  , testCase "VarName_1:=123" $
+    parse prob40 "VarName_1:=-1" @?= Left "Can't parse"
+  , testCase "varName:=-1" $
+    parse prob40 "varName:=-1" @?= Right ("varName", -1)
+  , testCase ":=0" $
+    parse prob40 ":=0" @?= Left "Can't parse"
+  , testCase " := 123 " $
+    parse prob40 " := 123 " @?= Left "Can't parse"
+  , testCase "varName_:=-1" $
+    parse prob40 "varName_:=-1" @?= Right ("varName_", -1)
+  , testCase "_ := 123 " $
+    parse prob40 "_ := 123 " @?= Left "Can't parse"
+  , testCase "varName := 1234_" $
+    parse prob40 "varName := 1234_" @?= Left "Leftover: _"
+  , testCase "varName := _1234_" $
+    parse prob40 "varName := _1234_" @?= Left "Can't parse"
+
+  , testCase "varName:=-1" $
     trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
   , testCase "isValidName" $
     isValidVariableName "varName_1" @?= True
