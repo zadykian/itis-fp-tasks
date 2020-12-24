@@ -190,10 +190,36 @@ trySplitByAssignmentOperator :: String -> Maybe (String, String)
 trySplitByAssignmentOperator input
     | isInfixOf ":=" input = Just
         (
-            trim $ takeWhile (/=':') input,
-            trim $ drop (succ $ fromJust $ elemIndex '=' input) input
+            trim $ getLeftPart input,
+            trim $ getRightPart input
         )
     | otherwise = Nothing
     where
+        getLeftPart :: String -> String
+        getLeftPart = safeInit . unpairwise . takeWhile (/=(':','=')) . pairwise
+
+        getRightPart :: String -> String
+        getRightPart = safeTail . unpairwise . tail . dropWhile (/=(':','=')) . pairwise
+
+        safeTail :: [a] -> [a]
+        safeTail []   = []
+        safeTail list = tail list
+
+        safeInit :: [a] -> [a]
+        safeInit []   = []
+        safeInit list = init list
+
         trim :: String -> String
         trim = dropWhile isSpace . dropWhileEnd isSpace
+
+-- Преобразовать список в список пар - соседних элементов.
+pairwise :: [a] -> [(a, a)]
+pairwise []       = []
+pairwise [_]      = []
+pairwise (x : xs) = (x, head xs) : pairwise xs
+
+-- Вернуть разбитый на пары список к первоначальному виду.
+unpairwise :: [(a, a)] -> [a]
+unpairwise []       = []
+unpairwise [(a, b)] = [a, b]
+unpairwise (x : xs) = fst x : unpairwise xs

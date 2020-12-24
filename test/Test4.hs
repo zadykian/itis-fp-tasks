@@ -168,7 +168,9 @@ test40 = testGroup "P40"
     parse prob40 "varName := - - 1" @?= Left "Can't parse"
   , testCase "varName := _1234_" $
     parse prob40 "varName := _1234_" @?= Left "Can't parse"
-  
+  , testCase "" $
+    parse prob40 "" @?= Left "Can't parse"
+
   , testCase ":= varName := 1234" $
     parse prob40 ":= varName := 1234" @?= Left "Can't parse"
   , testCase "varName :=:= 1234" $
@@ -181,4 +183,9 @@ test40 = testGroup "P40"
     parse prob40 "varName := 1234=" @?= Left "Leftover: ="
   , testCase "varName := 1234:=1" $
     parse prob40 "varName := 1234:=1" @?= Left "Leftover: :=1"
+
+  , testCase "pairwise [1,2]"           $ pairwise [1,2] @?= [(1,2)]
+  , testCase "unpairwise [(1,2)]"       $ unpairwise [(1,2)] @?= [1,2]
+  , testCase "pairwise [1,2,3]"         $ pairwise [1,2,3] @?= [(1,2),(2,3)]
+  , testCase "unpairwise [(1,2),(2,3)]" $ unpairwise [(1,2),(2,3)] @?= [1,2,3]
   ]
