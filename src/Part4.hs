@@ -160,7 +160,7 @@ variableValueParser = Parser parseFunc
             (_, numberInput) <- maybeToList $ trySplitByAssignmentOperator assignmentExpr
 
             -- Проверяем, что между ':=' и числом нет невалидных символов.
-            [] <- return $ takeWhile (\char -> (not $ isDigit char) &&  char /= '-') numberInput
+            [] <- return $ takeWhile (\char -> (not $ isDigit char) &&  char /= '-' && (not $ isSpace char)) numberInput
 
             -- Проверяем, что справа от ':=' есть хотя бы одна цифра.
             True <- return $ any isDigit numberInput
@@ -181,8 +181,10 @@ variableValueParser = Parser parseFunc
 
 -- Получить список невалидных символов, расположенных в конце выражения (справа от числа).
 takeInvalidTail :: String -> String
-takeInvalidTail ('-' : digitTail) = dropWhile isDigit digitTail
-takeInvalidTail numberString = dropWhile isDigit numberString
+takeInvalidTail = takeInvalid . trimStart
+    where
+        takeInvalid ('-' : digitTail) = dropWhile isDigit digitTail
+        takeInvalid numberString = dropWhile isDigit numberString
 
 -- Разбить строку на две подстроки, расположенные
 -- соответственно слева и справа от самого левого оператора присвоения ':='.
@@ -191,7 +193,7 @@ trySplitByAssignmentOperator input
     | hasSingleOperator = Just
         (
             trim $ getLeftPart input,
-            trim $ getRightPart input
+            getRightPart input
         )
     | otherwise = Nothing
     where
@@ -211,8 +213,13 @@ trySplitByAssignmentOperator input
         safeInit []   = []
         safeInit list = init list
 
-        trim :: String -> String
-        trim = dropWhile isSpace . dropWhileEnd isSpace
+-- Удалить пробелы, находящиеся в начале и в конце строки.
+trim :: String -> String
+trim = dropWhile isSpace . dropWhileEnd isSpace
+
+-- Удалить пробелы, находящиеся в начале строки.
+trimStart :: String -> String
+trimStart = dropWhile isSpace
 
 -- Преобразовать список в список пар - соседних элементов.
 pairwise :: [a] -> [(a, a)]
