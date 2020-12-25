@@ -16,10 +16,10 @@ import Part4.Types
 
 import Control.Applicative
 import Control.Monad (msum)
-import Data.Maybe (maybeToList, fromJust)
+import Data.Maybe (maybeToList)
 import Data.Char (intToDigit, isSpace, isDigit)
 import Text.Read (readMaybe)
-import Data.List (isInfixOf, dropWhileEnd, elemIndex)
+import Data.List (dropWhileEnd)
 
 ------------------------------------------------------------
 -- PROBLEM #33
