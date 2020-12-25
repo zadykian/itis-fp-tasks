@@ -195,7 +195,17 @@ test40 = testGroup "P40"
   , testCase "var:1:=-1" $
     parse prob40 "var:1:=-1" @?= Left "Can't parse"    
   , testCase "var:1:=-1" $
-    parse prob40 "var1:=:-1" @?= Left "Can't parse"    
+    parse prob40 "var1:=:-1" @?= Left "Can't parse"
+  , testCase "varName := -. 1234" $
+    parse prob40 "varName := -. 1234" @?= Left "Can't parse"
+  , testCase "var Name := 1234" $
+    parse prob40 "var Name := 1234" @?= Left "Can't parse"
+  , testCase "var Name := 1234" $
+    parse prob40 "varName := 1234,0" @?= Left "Leftover: ,0"
+  , testCase "var := -1234-" $
+    parse prob40 "var := -1234-" @?= Left "Leftover: -"
+  , testCase "var := -1234-" $
+    parse prob40 "var := -1234-" @?= Left "Leftover: -"
 
   , testCase "pairwise [1,2]"           $ pairwise   [1,2]         @?= [(1,2)]
   , testCase "unpairwise [(1,2)]"       $ unpairwise [(1,2)]       @?= [1,2]

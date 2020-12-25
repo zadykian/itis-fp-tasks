@@ -198,7 +198,7 @@ trySplitByAssignmentOperator input
     | otherwise = Nothing
     where
         hasSingleOperator = length (filter (==(':','=')) (pairwise input)) == 1
-        
+
         getLeftPart :: String -> String
         getLeftPart = safeInit . unpairwise . takeWhile (/=(':','=')) . pairwise
 
