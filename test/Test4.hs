@@ -125,7 +125,7 @@ test40 = testGroup "P40"
     parse variableValueParser ":= .123" @?= Left "Can't parse"
   , testCase "variableValueParser \"-1.23\"" $
     parse variableValueParser ":= -1.23" @?= Left "Leftover: .23"
-  
+
   , testCase "variableValueParser \"\"" $
     parse variableValueParser ":=" @?= Left "Can't parse"
   , testCase "variableValueParser \":= -A\"" $
@@ -152,6 +152,8 @@ test40 = testGroup "P40"
     parse prob40 "a:=0" @?= Right ("a", 0)
   , testCase ":=0" $
     parse prob40 ":=0" @?= Left "Can't parse"
+  , testCase "varName_:=" $
+    parse prob40 "varName_:=" @?= Left "Can't parse"
   , testCase " := 123 " $
     parse prob40 " := 123 " @?= Left "Can't parse"
   , testCase "varName_:=-1" $
