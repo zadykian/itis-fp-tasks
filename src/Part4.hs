@@ -215,7 +215,7 @@ trySplitByAssignmentOperator input
 
 -- Удалить пробелы, находящиеся в начале и в конце строки.
 trim :: String -> String
-trim = dropWhile isSpace . dropWhileEnd isSpace
+trim = trimStart . dropWhileEnd isSpace
 
 -- Удалить пробелы, находящиеся в начале строки.
 trimStart :: String -> String
